@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PME16_crafting_game</string>
+    <string name="btn_start">Spiel starten</string>
+
+    <string name="title_activity_game">GameActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
