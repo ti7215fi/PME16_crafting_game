@@ -3,6 +3,7 @@ package ferdi.david.tim.pme16_crafting_game;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +20,6 @@ public class Playground extends AppCompatActivity {
     final static int maxX = 10;
     final static int maxY = 15;
     private ImageView[][] playgroundCells = new ImageView[maxY][maxX];
-    private ImageView[][] tempCells = new ImageView[1][1];
     private Context context;
     private Drawable[] drawCell = new Drawable[6];
 
@@ -69,7 +69,8 @@ public class Playground extends AppCompatActivity {
                 playgroundCells[i][j].setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        tempCells[0][0] = null;
+                        Drawable tempCell1,tempCell2;
+
                         if(firstClick)
                         {
                             firstMoveX = x;
@@ -80,12 +81,13 @@ public class Playground extends AppCompatActivity {
                         {
                             secMoveX = x;
                             secMoveY = y;
-                            tempCells[0][0] = playgroundCells[firstMoveY][firstMoveX];
-                            playgroundCells[secMoveY][secMoveX].setBackground(tempCells[0][0].getBackground());
-                            playgroundCells[firstMoveY][firstMoveX].setBackground(playgroundCells[secMoveY][secMoveX].getBackground());
 
+                            tempCell1 = playgroundCells[firstMoveY][firstMoveX].getBackground();
+                            tempCell2 = playgroundCells[secMoveY][secMoveX].getBackground();
+
+                            playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
+                            playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
                             firstClick = true;
-
                         }
                     }
                 });
