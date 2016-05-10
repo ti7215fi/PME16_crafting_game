@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">"PME16_crafting_game "</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="bnt_start">Spielen</string>
+    <string name="bnt_highscore">Highscore</string>
 </resources>

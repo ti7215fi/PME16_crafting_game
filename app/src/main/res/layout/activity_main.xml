@@ -7,10 +7,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ferdi.david.tim.pme16_crafting_game.MainActivity">
+    tools:context="ferdi.david.tim.pme16_crafting_game.MainActivity"
+    android:background="@android:color/holo_orange_light">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="@string/bnt_start"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="89dp"
+        android:id="@+id/bntStart"
+        android:onClick="onClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/bnt_highscore"
+        android:id="@+id/button2"
+        android:layout_below="@+id/bntStart"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="29dp" />
 </RelativeLayout>
