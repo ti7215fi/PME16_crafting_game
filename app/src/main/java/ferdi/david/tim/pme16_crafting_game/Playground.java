@@ -86,11 +86,13 @@ public class Playground extends AppCompatActivity
                             secMoveX = x;
                             secMoveY = y;
 
-                            tempCell1 = playgroundCells[firstMoveY][firstMoveX].getBackground();
-                            tempCell2 = playgroundCells[secMoveY][secMoveX].getBackground();
+                            if(checkMove(firstMoveY,firstMoveX,secMoveY,secMoveX)) {
+                                tempCell1 = playgroundCells[firstMoveY][firstMoveX].getBackground();
+                                tempCell2 = playgroundCells[secMoveY][secMoveX].getBackground();
 
-                            playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
-                            playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
+                                playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
+                                playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
+                            }
                             firstClick = true;
                         }
                     }
@@ -117,12 +119,37 @@ public class Playground extends AppCompatActivity
         return randomNum;
     }
 
-    private void checkMove(int m1Y, int m1X, int m2Y, int m2X)
+    private boolean checkMove(int m1Y, int m1X, int m2Y, int m2X)
     {
-        int rangePlusX = m1X +1;
-        int rangeMinusX = m1X -1;
-        int rangePlusY = m1X +1;
-        int rangeMinusY = m1X -1;
+        int diffYY, diffXX = 0;
+
+        if(m1Y < m2Y)
+        {
+            diffYY = m2Y - m1Y;
+        }
+        else
+        {
+            diffYY = m1Y - m2Y;
+        }
+
+        if(m1X < m2X)
+        {
+            diffXX = m2X - m1X;
+        }
+        else
+        {
+            diffXX = m1X - m2X;
+        }
+
+        if (diffYY == 0 ^ diffXX == 0)
+        {
+            if(diffXX == 1 ^ diffYY == 1)
+            {
+                return true;
+            }
+
+        }
+        return false;
     }
 
 
