@@ -16,9 +16,10 @@ import android.widget.LinearLayout;
 
 import java.util.Random;
 
-public class Playground extends AppCompatActivity {
-    final static int maxX = 10;
-    final static int maxY = 15;
+public class Playground extends AppCompatActivity
+{
+    final static int maxX = 8;
+    final static int maxY = 13;
     private ImageView[][] playgroundCells = new ImageView[maxY][maxX];
     private Context context;
     private Drawable[] drawCell = new Drawable[6];
@@ -32,7 +33,8 @@ public class Playground extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -41,7 +43,8 @@ public class Playground extends AppCompatActivity {
         loadResources();
         designBoard();
     }
-    private void loadResources() {
+    private void loadResources()
+    {
         drawCell[3] = context.getResources().getDrawable(R.drawable.feuer);
         drawCell[0] = context.getResources().getDrawable(R.drawable.eisen);
         drawCell[1] = context.getResources().getDrawable(R.drawable.holz);
@@ -49,7 +52,8 @@ public class Playground extends AppCompatActivity {
         drawCell[4] = context.getResources().getDrawable(R.drawable.fleisch);
     }
     @SuppressLint("NewApi")
-    private void designBoard() {
+    private void designBoard()
+    {
         int sizeofCell = Math.round(ScreenWidth()/ maxX);
 
         LinearLayout.LayoutParams lpRow = new LinearLayout.LayoutParams(sizeofCell * maxX, sizeofCell);
@@ -98,7 +102,8 @@ public class Playground extends AppCompatActivity {
         }
     }
 
-    private float ScreenWidth() {
+    private float ScreenWidth()
+    {
         Resources resources = context.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
         return dm.widthPixels;
@@ -111,5 +116,14 @@ public class Playground extends AppCompatActivity {
 
         return randomNum;
     }
+
+    private void checkMove(int m1Y, int m1X, int m2Y, int m2X)
+    {
+        int rangePlusX = m1X +1;
+        int rangeMinusX = m1X -1;
+        int rangePlusY = m1X +1;
+        int rangeMinusY = m1X -1;
+    }
+
 
 }
