@@ -110,8 +110,7 @@ public class Playground extends AppCompatActivity
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
-                                search(getField(secMoveY,secMoveX),secMoveY,secMoveX);
-                                int a = 0;
+                                //search(getField(secMoveY,secMoveX),secMoveY,secMoveX);            /only test
                             }
                             firstClick = true;
                         }
