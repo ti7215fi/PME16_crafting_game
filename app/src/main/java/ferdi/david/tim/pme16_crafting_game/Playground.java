@@ -18,8 +18,9 @@ import java.util.Random;
 
 public class Playground extends AppCompatActivity
 {
-    final static int maxX = 8;
-    final static int maxY = 13;
+    final static int maxX = 8;  // amount of cells
+    final static int maxY = 13; // amount of rows
+
     private ImageView[][] playgroundCells = new ImageView[maxY][maxX];
     private Context context;
     private Drawable[] drawCell = new Drawable[6];
@@ -43,6 +44,10 @@ public class Playground extends AppCompatActivity
         loadResources();
         designBoard();
     }
+
+    /**
+     * load pictures into array
+     */
     private void loadResources()
     {
         drawCell[3] = context.getResources().getDrawable(R.drawable.feuer);
@@ -51,6 +56,12 @@ public class Playground extends AppCompatActivity
         drawCell[2] = context.getResources().getDrawable(R.drawable.wasser);
         drawCell[4] = context.getResources().getDrawable(R.drawable.fleisch);
     }
+
+    /**
+     * - Creates the playground with width and height of the device
+     * - Fill ImageView array with random pictures
+     * - add OnClickListener du every picture
+     */
     @SuppressLint("NewApi")
     private void designBoard()
     {
@@ -71,6 +82,11 @@ public class Playground extends AppCompatActivity
                 final int y = i;
                 final int x = j;
                 playgroundCells[i][j].setOnClickListener(new View.OnClickListener() {
+                    /**
+                     * - check if first or second move
+                     * - if second move, switch images
+                     * @param v actual view
+                     */
                     @Override
                     public void onClick(View v) {
                         Drawable tempCell1,tempCell2;
@@ -104,6 +120,10 @@ public class Playground extends AppCompatActivity
         }
     }
 
+    /**
+     *
+     * @return amount of horizontal pixels of the device
+     */
     private float ScreenWidth()
     {
         Resources resources = context.getResources();
@@ -111,6 +131,12 @@ public class Playground extends AppCompatActivity
         return dm.widthPixels;
     }
 
+    /**
+     * Returns a random number between two parameters
+     * @param min minimum number
+     * @param max maximum
+     * @return random number
+     */
     private int getRandomInt(int min, int max)
     {
         Random rand = new Random();
@@ -119,6 +145,14 @@ public class Playground extends AppCompatActivity
         return randomNum;
     }
 
+    /**
+     * Check, if the move done by the player is correct
+     * @param m1Y value X first  move
+     * @param m1X value Y first  move
+     * @param m2Y value Y second  move
+     * @param m2X value Y second  move
+     * @return true, if move is correct, false if move is not allowed
+     */
     private boolean checkMove(int m1Y, int m1X, int m2Y, int m2X)
     {
         int diffYY, diffXX = 0;
