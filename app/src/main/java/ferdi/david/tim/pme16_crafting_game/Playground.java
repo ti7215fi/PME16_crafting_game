@@ -55,6 +55,7 @@ public class Playground extends AppCompatActivity
         drawCell[1] = context.getResources().getDrawable(R.drawable.holz);
         drawCell[2] = context.getResources().getDrawable(R.drawable.wasser);
         drawCell[4] = context.getResources().getDrawable(R.drawable.fleisch);
+        drawCell[5] = context.getResources().getDrawable(R.drawable.leer);
     }
 
     /**
@@ -102,12 +103,15 @@ public class Playground extends AppCompatActivity
                             secMoveX = x;
                             secMoveY = y;
 
-                            if(checkMove(firstMoveY,firstMoveX,secMoveY,secMoveX)) {
+                            if(checkMove(firstMoveY,firstMoveX,secMoveY,secMoveX))
+                            {
                                 tempCell1 = playgroundCells[firstMoveY][firstMoveX].getBackground();
                                 tempCell2 = playgroundCells[secMoveY][secMoveX].getBackground();
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
+                                search(getField(secMoveY,secMoveX),secMoveY,secMoveX);
+                                int a = 0;
                             }
                             firstClick = true;
                         }
@@ -186,5 +190,53 @@ public class Playground extends AppCompatActivity
         return false;
     }
 
+    /**
+     * recursive function looking for field with same Drawable
+     * @param drawable drawable looking for
+     * @param poY start position Y
+     * @param poX start position X
+     * @return true / false
+     */
+    @SuppressLint("NewApi")
+    private boolean search(Drawable drawable,int poY, int poX)
+    {
+        if(getField(poY,poX ) != drawable)  // stop if not correct background
+        {
+            return false;
+        }
+        if(getField(poY,poX ) == drawable)  // stop if not correct background
+        {
+            playgroundCells[poY][poX].setBackground(drawCell[5]);
+            return false;
+        }
 
+        if(search(drawable,poY, poX - 1))
+        {
+            return true;
+        }
+        if (search(drawable, poY+1, poX))
+        {
+            return true;
+        }
+        if (search(drawable, poY, poX + 1))
+        {
+            return true;
+        }
+        if (search(drawable, poY -1, poX))
+        {
+            return true;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * @param poY
+     * @param poX
+     * @return drawable on position y,x
+     */
+    private Drawable getField(int poY, int poX)
+    {
+        return playgroundCells[poY][poX].getBackground();
+    }
 }
