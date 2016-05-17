@@ -110,7 +110,7 @@ public class Playground extends AppCompatActivity
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
-                                //search(getField(secMoveY,secMoveX),secMoveY,secMoveX);            /only test
+                                search(getField(secMoveY,secMoveX),secMoveY,secMoveX);            //only test
                             }
                             firstClick = true;
                         }
@@ -206,26 +206,34 @@ public class Playground extends AppCompatActivity
         if(getField(poY,poX ) == drawable)  // stop if not correct background
         {
             playgroundCells[poY][poX].setBackground(drawCell[5]);
-            return false;
         }
 
-        if(search(drawable,poY, poX - 1))
-        {
-            return true;
+        if(poX >=1) {
+            if (search(drawable, poY, poX - 1)) {
+                return true;
+            }
         }
-        if (search(drawable, poY+1, poX))
-        {
-            return true;
+
+        if(poY < maxY-1) {
+            if (search(drawable, poY + 1, poX)) {
+                return true;
+            }
         }
-        if (search(drawable, poY, poX + 1))
-        {
-            return true;
+
+        if(poX < maxX-1) {
+            if (search(drawable, poY, poX + 1)) {
+                return true;
+            }
         }
-        if (search(drawable, poY -1, poX))
-        {
-            return true;
+
+        if(poY >= 1) {
+            if (search(drawable, poY - 1, poX)) {
+                return true;
+            }
         }
-        return true;
+
+        playgroundCells[poY][poX].setBackground(drawCell[5]);
+        return false;
     }
 
     /**
