@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.test.suitebuilder.annotation.Suppress;
@@ -13,7 +14,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class Playground extends AppCompatActivity
@@ -24,7 +32,7 @@ public class Playground extends AppCompatActivity
     private ImageView[][] playgroundCells = new ImageView[maxY][maxX];
     private Context context;
     private Drawable[] drawCell = new Drawable[6];
-
+    private List<Coordinate> listOfCoordinates = new ArrayList<Coordinate>();
     private boolean firstClick = true;
     private int firstMoveX;
     private int firstMoveY;
@@ -32,6 +40,9 @@ public class Playground extends AppCompatActivity
     private int secMoveX;
     private int secMoveY;
 
+    private int score = 0;
+
+    TextView txtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +52,7 @@ public class Playground extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_playground);
         context = this;
+        txtScore = (TextView)findViewById(R.id.txt_score);
         loadResources();
         designBoard();
     }
@@ -62,6 +74,7 @@ public class Playground extends AppCompatActivity
      * - Creates the playground with width and height of the device
      * - Fill ImageView array with random pictures
      * - add OnClickListener du every picture
+     * - call recursive function to mark fields
      */
     @SuppressLint("NewApi")
     private void designBoard()
@@ -110,7 +123,17 @@ public class Playground extends AppCompatActivity
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
-                                search(getField(secMoveY,secMoveX),secMoveY,secMoveX);            //only test
+                                listOfCoordinates = new ArrayList<Coordinate>();
+                                Drawable temp = getField(secMoveY,secMoveX);
+                                search(temp,secMoveY,secMoveX);  //start recursive search for same color fields
+                                int a = listOfCoordinates.size();
+                                if(a > 4) // 3 or more connected blocks --> alle in der Liste weiß wenn > 2
+                                {
+                                    whiteOutBlock(listOfCoordinates);
+                                    listOfCoordinates.clear();
+                                }
+                                //txtScore.setText("Punkte: " + score);   // update score text field
+
                             }
                             firstClick = true;
                         }
@@ -190,7 +213,7 @@ public class Playground extends AppCompatActivity
     }
 
     /**
-     * recursive function looking for field with same Drawable and set group as white image
+     * recursive function looking for fields with same Drawable and add their coordinates in the list
      * @param drawable drawable looking for
      * @param poY start position Y
      * @param poX start position X
@@ -203,13 +226,13 @@ public class Playground extends AppCompatActivity
         {
             return false;
         }
-        if(getField(poY,poX ) == drawCell[5])  // stop if white field
+        if(containsCoordiante(listOfCoordinates,poY,poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == drawCell[5])
         {
             return false;
         }
         if(getField(poY,poX ) == drawable)  //mark as visited
         {
-            playgroundCells[poY][poX].setBackground(drawCell[5]);
+            listOfCoordinates.add(new Coordinate(poY,poX));
         }
 
         if(poX >=1) {
@@ -235,10 +258,10 @@ public class Playground extends AppCompatActivity
                 return true;
             }
         }
-
-        playgroundCells[poY][poX].setBackground(drawCell[5]);
+        listOfCoordinates.add(new Coordinate(poY,poX));
         return false;
     }
+
 
     /**
      *
@@ -249,5 +272,37 @@ public class Playground extends AppCompatActivity
     private Drawable getField(int poY, int poX)
     {
         return playgroundCells[poY][poX].getBackground();
+    }
+
+    /**
+     * draw all coordinates in the list white, to mark them to craft
+     * @param listOfCoordinates list with coordinates
+     */
+    @SuppressLint("NewApi")
+    private void whiteOutBlock(List<Coordinate> listOfCoordinates)
+    {
+        for(Coordinate coordinate : listOfCoordinates)
+        {
+            playgroundCells[coordinate.getY()][coordinate.getX()].setBackground(drawCell[5]);
+        }
+    }
+
+    /**
+     * function to check the list, if coordinate is already
+     * @param list list with coordinates
+     * @param posY
+     * @param posX
+     * @return
+     */
+    private boolean containsCoordiante(List<Coordinate> list, int posY, int posX)
+    {
+        for(Coordinate coordinate : list)
+        {
+            if((coordinate.getY() == posY) && (coordinate.getX() ==posX))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

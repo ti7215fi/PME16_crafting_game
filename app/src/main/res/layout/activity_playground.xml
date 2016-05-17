@@ -19,19 +19,21 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Punkte:"
+                android:text="@string/txt_score"
                 android:layout_weight="3"
                 android:padding="5dp"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:id="@+id/txt_score" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Zeit:"
+                android:text="@string/txt_time"
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:id="@+id/txt_time" />
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

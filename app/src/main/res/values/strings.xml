@@ -3,4 +3,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="bnt_start">Spielen</string>
     <string name="bnt_highscore">Highscore</string>
+    <string name="txt_score">Punkte: 0</string>
+    <string name="txt_time">Zeit: 0:00:00</string>
 </resources>
