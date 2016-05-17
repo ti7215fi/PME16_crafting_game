@@ -190,7 +190,7 @@ public class Playground extends AppCompatActivity
     }
 
     /**
-     * recursive function looking for field with same Drawable
+     * recursive function looking for field with same Drawable and set group as white image
      * @param drawable drawable looking for
      * @param poY start position Y
      * @param poX start position X
@@ -203,7 +203,11 @@ public class Playground extends AppCompatActivity
         {
             return false;
         }
-        if(getField(poY,poX ) == drawable)  // stop if not correct background
+        if(getField(poY,poX ) == drawCell[5])  // stop if white field
+        {
+            return false;
+        }
+        if(getField(poY,poX ) == drawable)  //mark as visited
         {
             playgroundCells[poY][poX].setBackground(drawCell[5]);
         }
