@@ -226,7 +226,7 @@ public class Playground extends AppCompatActivity
         {
             return false;
         }
-        if(containsCoordiante(listOfCoordinates,poY,poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == drawCell[5])
+        if(containsCoordinate(listOfCoordinates,poY,poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == drawCell[5])
         {
             return false;
         }
@@ -294,7 +294,7 @@ public class Playground extends AppCompatActivity
      * @param posX
      * @return
      */
-    private boolean containsCoordiante(List<Coordinate> list, int posY, int posX)
+    private boolean containsCoordinate(List<Coordinate> list, int posY, int posX)
     {
         for(Coordinate coordinate : list)
         {
