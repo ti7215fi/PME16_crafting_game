@@ -134,7 +134,6 @@ public class Playground extends AppCompatActivity
                                 {
                                     whiteOutBlock(listOfCoordinates);
                                     listOfCoordinates.clear();
-                                    fillWhiteFields();
                                 }
 
                                 search(tempDrawSecMove,secMoveY,secMoveX);  //start recursive search for same color fields
@@ -143,8 +142,8 @@ public class Playground extends AppCompatActivity
                                 {
                                     whiteOutBlock(listOfCoordinates);
                                     listOfCoordinates.clear();
-                                    fillWhiteFields();
                                 }
+                                //fillWhiteFields();
                                 //txtScore.setText("Punkte: " + score);   // update score text field
 
                             }
@@ -326,12 +325,30 @@ public class Playground extends AppCompatActivity
     {
         for(int i = 0; i < maxX; i++)
         {
-            for(int j = maxY; j > 0; j--)
+            for(int j = maxY-1; j >= 0; j--)
             {
-                if(playgroundCells[j-1][i].getBackground() == drawCell[5]) // found white cell
+                int temp = 2;
+                while(playgroundCells[j][i].getBackground() == drawCell[5])
                 {
 
+                    if(playgroundCells[maxY-temp][i].getBackground() == drawCell[5] )
+                    {
+                        if(temp >=1) {
+
+                            temp--;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else if(playgroundCells[maxY-temp][i].getBackground() != drawCell[5] )
+                    {
+                        playgroundCells[j][i].setBackground(playgroundCells[maxY-temp][i].getBackground());
+                        playgroundCells[maxY-temp][i].setBackground(drawCell[5]);
+                    }
                 }
+
             }
         }
     }
