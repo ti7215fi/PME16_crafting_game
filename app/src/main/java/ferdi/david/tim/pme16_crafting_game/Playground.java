@@ -124,13 +124,26 @@ public class Playground extends AppCompatActivity
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
                                 listOfCoordinates = new ArrayList<Coordinate>();
-                                Drawable temp = getField(secMoveY,secMoveX);
-                                search(temp,secMoveY,secMoveX);  //start recursive search for same color fields
-                                int a = listOfCoordinates.size();
-                                if(a > 4) // 3 or more connected blocks --> alle in der Liste weiß wenn > 2
+
+                                Drawable tempDrawFirstMove = getField(firstMoveY,firstMoveX);
+                                Drawable tempDrawSecMove = getField(secMoveY,secMoveX);
+
+                                search(tempDrawFirstMove,firstMoveY,firstMoveX);
+                                int amountOfCooFirstMove = listOfCoordinates.size();
+                                if(amountOfCooFirstMove > 4) // 4 or more connected blocks
                                 {
                                     whiteOutBlock(listOfCoordinates);
                                     listOfCoordinates.clear();
+                                    fillWhiteFields();
+                                }
+
+                                search(tempDrawSecMove,secMoveY,secMoveX);  //start recursive search for same color fields
+                                int amountOfCooSectMove = listOfCoordinates.size();
+                                if(amountOfCooSectMove > 4) // 4 or more connected blocks
+                                {
+                                    whiteOutBlock(listOfCoordinates);
+                                    listOfCoordinates.clear();
+                                    fillWhiteFields();
                                 }
                                 //txtScore.setText("Punkte: " + score);   // update score text field
 
@@ -262,7 +275,6 @@ public class Playground extends AppCompatActivity
         return false;
     }
 
-
     /**
      *
      * @param poY
@@ -304,5 +316,23 @@ public class Playground extends AppCompatActivity
             }
         }
         return false;
+    }
+
+    /**
+     *
+     */
+    @SuppressLint("NewApi")
+    private void fillWhiteFields()
+    {
+        for(int i = 0; i < maxX; i++)
+        {
+            for(int j = maxY; j > 0; j--)
+            {
+                if(playgroundCells[j-1][i].getBackground() == drawCell[5]) // found white cell
+                {
+
+                }
+            }
+        }
     }
 }
