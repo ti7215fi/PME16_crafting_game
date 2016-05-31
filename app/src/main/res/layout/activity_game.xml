@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_light"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_score"
+                android:layout_weight="3"
+                android:padding="5dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/txt_score" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_time"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:id="@+id/txt_time" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linBoardGame"
+        android:orientation="vertical"
+        android:background="@android:color/holo_blue_bright"
+        android:layout_below="@+id/linMenu">
+    </LinearLayout>
+
+
+</RelativeLayout>

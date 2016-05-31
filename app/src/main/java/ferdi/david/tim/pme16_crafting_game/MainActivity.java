@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         buttonStart = (Button)findViewById(R.id.bntStart);
     }
     public void onClick(View arg0) {
-        Intent i = new Intent(MainActivity.this, Playground.class);
+        Intent i = new Intent(MainActivity.this, GameActivity.class);
         startActivity(i);
     }
 }
