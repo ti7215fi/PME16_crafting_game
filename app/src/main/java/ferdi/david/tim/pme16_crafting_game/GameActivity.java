@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -25,7 +27,7 @@ public class GameActivity extends AppCompatActivity
     private ImageView[][]       playgroundCells = new ImageView[maxY][maxX];
     private Context             context;
     private Drawable[]          drawCell = new Drawable[6];
-    private List<Coordinate>    listOfCoordinates = new ArrayList<Coordinate>();
+    private List<Coordinate>    listOfCoordinates = new ArrayList<>();
 
     private boolean             firstClick = true;
     private int                 firstMoveX;
@@ -55,12 +57,12 @@ public class GameActivity extends AppCompatActivity
      */
     private void loadResources()
     {
-        drawCell[3] = context.getResources().getDrawable(R.drawable.feuer);
-        drawCell[0] = context.getResources().getDrawable(R.drawable.eisen);
-        drawCell[1] = context.getResources().getDrawable(R.drawable.holz);
-        drawCell[2] = context.getResources().getDrawable(R.drawable.wasser);
-        drawCell[4] = context.getResources().getDrawable(R.drawable.fleisch);
-        drawCell[5] = context.getResources().getDrawable(R.drawable.leer);
+        drawCell[3] = ResourcesCompat.getDrawable(getResources(), R.drawable.feuer, null);
+        drawCell[0] = ResourcesCompat.getDrawable(getResources(), R.drawable.eisen, null);
+        drawCell[1] = ResourcesCompat.getDrawable(getResources(), R.drawable.holz, null);
+        drawCell[2] = ResourcesCompat.getDrawable(getResources(), R.drawable.wasser, null);
+        drawCell[4] = ResourcesCompat.getDrawable(getResources(), R.drawable.fleisch, null);
+        drawCell[5] = ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
     }
 
     /**
@@ -116,7 +118,7 @@ public class GameActivity extends AppCompatActivity
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
-                                listOfCoordinates = new ArrayList<Coordinate>();
+                                listOfCoordinates = new ArrayList<>();
 
                                 Drawable tempDrawFirstMove = getField(firstMoveY,firstMoveX);
                                 Drawable tempDrawSecMove = getField(secMoveY,secMoveX);
@@ -144,10 +146,11 @@ public class GameActivity extends AppCompatActivity
                         }
                     }
                 });
-
                 linRow.addView(playgroundCells[i][j], lpCell);
             }
-            linBoardGame.addView(linRow,lpRow);
+            if(linBoardGame != null) {
+                linBoardGame.addView(linRow, lpRow);
+            }
         }
     }
 
@@ -171,9 +174,7 @@ public class GameActivity extends AppCompatActivity
     private int getRandomInt(int min, int max)
     {
         Random rand = new Random();
-        int randomNum = rand.nextInt((max - min) + 1) + min;
-
-        return randomNum;
+        return rand.nextInt((max - min) + 1) + min;
     }
 
     /**
@@ -186,7 +187,7 @@ public class GameActivity extends AppCompatActivity
      */
     private boolean checkMove(int m1Y, int m1X, int m2Y, int m2X)
     {
-        int diffYY, diffXX = 0;
+        int diffYY, diffXX;
 
         if(m1Y < m2Y)
         {
@@ -269,8 +270,8 @@ public class GameActivity extends AppCompatActivity
 
     /**
      *
-     * @param poY
-     * @param poX
+     * @param poY position y of the cell
+     * @param poX position x of the cell
      * @return drawable on position y,x
      */
     private Drawable getField(int poY, int poX)
@@ -294,9 +295,9 @@ public class GameActivity extends AppCompatActivity
     /**
      * function to check the list, if coordinate is already
      * @param list list with coordinates
-     * @param posY
-     * @param posX
-     * @return
+     * @param posY position y
+     * @param posX position x
+     * @return true if the list contains the coordinate
      */
     private boolean containsCoordinate(List<Coordinate> list, int posY, int posX)
     {
