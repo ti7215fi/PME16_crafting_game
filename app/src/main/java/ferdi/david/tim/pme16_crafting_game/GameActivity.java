@@ -56,10 +56,10 @@ public class GameActivity extends AppCompatActivity
      */
     private void loadResources()
     {
-        drawCell[3] = ResourcesCompat.getDrawable(getResources(), R.drawable.feuer, null);
-        drawCell[0] = ResourcesCompat.getDrawable(getResources(), R.drawable.eisen, null);
-        drawCell[1] = ResourcesCompat.getDrawable(getResources(), R.drawable.holz, null);
-        drawCell[2] = ResourcesCompat.getDrawable(getResources(), R.drawable.wasser, null);
+        drawCell[3] = ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null);
+        drawCell[0] = ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null);
+        drawCell[1] = ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null);
+        drawCell[2] = ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null);
         drawCell[4] = ResourcesCompat.getDrawable(getResources(), R.drawable.fleisch, null);
         drawCell[5] = ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
     }

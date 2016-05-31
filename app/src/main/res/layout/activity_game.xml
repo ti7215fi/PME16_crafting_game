@@ -6,43 +6,45 @@
 
     <LinearLayout
         android:id="@+id/linMenu"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_light"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_alignParentTop="true"
+        android:gravity="top"
+        android:clickable="false">
 
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/txt_score"
-                android:layout_weight="3"
-                android:padding="5dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:id="@+id/txt_score" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/txt_time"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:id="@+id/txt_time" />
-        </LinearLayout>
+            android:text="@string/txt_score"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/txt_score"
+            android:layout_marginTop="5dp"
+            android:gravity="start" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_time"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/txt_time"
+            android:layout_marginTop="5dp"
+            android:gravity="end" />
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/linBoardGame"
         android:orientation="vertical"
-        android:background="@android:color/holo_blue_bright"
-        android:layout_below="@+id/linMenu">
+        android:layout_below="@+id/linMenu"
+        android:background="@drawable/grassland">
+
     </LinearLayout>
 
 
