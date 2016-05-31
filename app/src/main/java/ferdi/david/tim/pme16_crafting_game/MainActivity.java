@@ -8,7 +8,33 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonStart;
+    private Button buttonStart;
+    private View.OnClickListener buttonStartOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent i = new Intent(MainActivity.this, GameActivity.class);
+            startActivity(i);
+        }
+    };
+
+    private Button buttonHighscore;
+    private View.OnClickListener buttonHighScoreOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent i = new Intent(MainActivity.this, HighscoreActivity.class);
+            startActivity(i);
+        }
+    };
+
+    private Button buttonLogin;
+    private View.OnClickListener buttonLoginOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,9 +43,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         buttonStart = (Button)findViewById(R.id.bntStart);
+        if(buttonStart != null) {
+            buttonStart.setOnClickListener(buttonStartOnClick);
+        }
+
+        buttonHighscore = (Button)findViewById(R.id.btnHighscore);
+        if(buttonHighscore != null) {
+            buttonHighscore.setOnClickListener(buttonHighScoreOnClick);
+        }
+
+        buttonLogin = (Button)findViewById(R.id.btnLogin);
+        if(buttonLogin != null) {
+            buttonLogin.setOnClickListener(buttonLoginOnClick);
+        }
     }
-    public void onClick(View arg0) {
-        Intent i = new Intent(MainActivity.this, GameActivity.class);
-        startActivity(i);
-    }
+
 }
