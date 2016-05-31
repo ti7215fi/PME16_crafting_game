@@ -3,7 +3,7 @@ package ferdi.david.tim.pme16_crafting_game;
 /**
  * struct to realize a coordinate with y and x value
  */
-public class Coordinate {
+public class Coordinate extends Object{
     private int y;
     private int x;
 
