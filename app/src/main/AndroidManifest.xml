@@ -24,7 +24,8 @@
         <activity android:name=".HighscoreActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
+        <activity android:name=".InventoryActivity"></activity>
     </application>
 
 </manifest>
