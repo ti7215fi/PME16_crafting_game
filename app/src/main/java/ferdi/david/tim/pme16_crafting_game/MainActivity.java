@@ -35,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private Button buttonInventory;
+    private View.OnClickListener buttonInventoryOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent i = new Intent(MainActivity.this, InventoryActivity.class);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         buttonHighscore = (Button)findViewById(R.id.btnHighscore);
         if(buttonHighscore != null) {
             buttonHighscore.setOnClickListener(buttonHighScoreOnClick);
+        }
+
+        buttonInventory = (Button)findViewById(R.id.btnInventory);
+        if(buttonInventory != null) {
+            buttonInventory.setOnClickListener(buttonInventoryOnClick);
         }
 
         buttonLogin = (Button)findViewById(R.id.btnLogin);
