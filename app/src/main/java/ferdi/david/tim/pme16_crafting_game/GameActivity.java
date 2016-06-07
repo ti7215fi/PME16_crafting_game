@@ -3,6 +3,7 @@ package ferdi.david.tim.pme16_crafting_game;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,13 +21,13 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity
 {
-    final static int            maxX = 8;  // amount of cells
-    final static int            maxY = 8; // amount of rows
+    private final static int    maxX = 8;  // amount of cells
+    private final static int    maxY = 8; // amount of rows
 
     private ImageView[][]       playgroundCells = new ImageView[maxY][maxX];
     private Context             context;
     private Drawable[]          drawCell = new Drawable[6];
-    private List<Coordinate>    listOfCoordinates = new ArrayList<>();
+    private List<Point>         listOfPoints = new ArrayList<>();
 
     private boolean             firstClick = true;
     private int                 firstMoveX;
@@ -36,7 +37,7 @@ public class GameActivity extends AppCompatActivity
 
     private int                 score = 0;
 
-    TextView txtScore;
+    private TextView txtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -117,25 +118,25 @@ public class GameActivity extends AppCompatActivity
 
                                 playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
                                 playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
-                                listOfCoordinates = new ArrayList<>();
+                                listOfPoints = new ArrayList<>();
 
                                 Drawable tempDrawFirstMove = getField(firstMoveY,firstMoveX);
                                 Drawable tempDrawSecMove = getField(secMoveY,secMoveX);
 
                                 search(tempDrawFirstMove,firstMoveY,firstMoveX);
-                                int amountOfCooFirstMove = listOfCoordinates.size();
+                                int amountOfCooFirstMove = listOfPoints.size();
                                 if(amountOfCooFirstMove > 4) // 4 or more connected blocks
                                 {
-                                    whiteOutBlock(listOfCoordinates);
-                                    listOfCoordinates.clear();
+                                    whiteOutBlock(listOfPoints);
+                                    listOfPoints.clear();
                                 }
 
                                 search(tempDrawSecMove,secMoveY,secMoveX);  //start recursive search for same color fields
-                                int amountOfCooSectMove = listOfCoordinates.size();
+                                int amountOfCooSectMove = listOfPoints.size();
                                 if(amountOfCooSectMove > 4) // 4 or more connected blocks
                                 {
-                                    whiteOutBlock(listOfCoordinates);
-                                    listOfCoordinates.clear();
+                                    whiteOutBlock(listOfPoints);
+                                    listOfPoints.clear();
                                 }
                                 //fillWhiteFields();
                                 //txtScore.setText("Punkte: " + score);   // update score text field
@@ -218,7 +219,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     /**
-     * recursive function looking for fields with same Drawable and add their coordinates in the list
+     * recursive function looking for fields with same Drawable and add their Points in the list
      * @param drawable drawable looking for
      * @param poY start position Y
      * @param poX start position X
@@ -231,13 +232,13 @@ public class GameActivity extends AppCompatActivity
         {
             return false;
         }
-        if(containsCoordinate(listOfCoordinates,poY,poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == drawCell[5])
+        if(containsPoint(listOfPoints,poY,poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == drawCell[5])
         {
             return false;
         }
         if(getField(poY,poX ) == drawable)  //mark as visited
         {
-            listOfCoordinates.add(new Coordinate(poY,poX));
+            listOfPoints.add(new Point(poX,poY));
         }
 
         if(poX >=1) {
@@ -263,7 +264,7 @@ public class GameActivity extends AppCompatActivity
                 return true;
             }
         }
-        listOfCoordinates.add(new Coordinate(poY,poX));
+        listOfPoints.add(new Point(poX,poY));
         return false;
     }
 
@@ -279,30 +280,30 @@ public class GameActivity extends AppCompatActivity
     }
 
     /**
-     * draw all coordinates in the list white, to mark them to craft
-     * @param listOfCoordinates list with coordinates
+     * draw all Points in the list white, to mark them to craft
+     * @param listOfPoints list with Points
      */
     @SuppressLint("NewApi")
-    private void whiteOutBlock(List<Coordinate> listOfCoordinates)
+    private void whiteOutBlock(List<Point> listOfPoints)
     {
-        for(Coordinate coordinate : listOfCoordinates)
+        for(Point Point : listOfPoints)
         {
-            playgroundCells[coordinate.getY()][coordinate.getX()].setBackground(drawCell[5]);
+            playgroundCells[Point.y][Point.x].setBackground(drawCell[5]);
         }
     }
 
     /**
-     * function to check the list, if coordinate is already
-     * @param list list with coordinates
+     * function to check the list, if Point is already
+     * @param list list with Points
      * @param posY position y
      * @param posX position x
-     * @return true if the list contains the coordinate
+     * @return true if the list contains the Point
      */
-    private boolean containsCoordinate(List<Coordinate> list, int posY, int posX)
+    private boolean containsPoint(List<Point> list, int posY, int posX)
     {
-        for(Coordinate coordinate : list)
+        for(Point Point : list)
         {
-            if((coordinate.getY() == posY) && (coordinate.getX() ==posX))
+            if((Point.y == posY) && (Point.x == posX))
             {
                 return true;
             }
