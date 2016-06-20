@@ -2,13 +2,11 @@ package ferdi.david.tim.pme16_crafting_game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -21,12 +19,14 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity
 {
-    private final static int    maxX = 8;  // amount of cells
-    private final static int    maxY = 8; // amount of rows
+    private ApplicationController app;
 
-    private ImageView[][]       playgroundCells = new ImageView[maxY][maxX];
+    private int                 maxX;  // amount of cells
+    private int                 maxY; // amount of rows
+
+    private ImageView[][]       playground;
     private Context             context;
-    private Drawable[]          drawCell = new Drawable[6];
+    private Drawable[]          drawCell;
     private List<Point>         listOfPoints = new ArrayList<>();
 
     private boolean             firstClick = true;
@@ -36,8 +36,7 @@ public class GameActivity extends AppCompatActivity
     private int                 secMoveY;
 
     private int                 score = 0;
-
-    private TextView txtScore;
+    private TextView            txtScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,23 +45,30 @@ public class GameActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
+
+        app = (ApplicationController)getApplication();
+        app.getLevelManager().setCurrentLevel(app.getLevelManager().getLevel(1));
+
+        maxX = app.getLevelManager().getCurrentLevel().getColCount();
+        maxY = app.getLevelManager().getCurrentLevel().getRowCount();
+
+        playground = app.getLevelManager().getCurrentLevel().getPlayground();
+
         context = this;
         txtScore = (TextView)findViewById(R.id.txt_score);
-        loadResources();
+        loadImagesResources();
         designBoard();
     }
 
-    /**
-     * load pictures into array
-     */
-    private void loadResources()
-    {
-        drawCell[3] = ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null);
-        drawCell[0] = ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null);
-        drawCell[1] = ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null);
-        drawCell[2] = ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null);
-        drawCell[4] = ResourcesCompat.getDrawable(getResources(), R.drawable.fleisch, null);
-        drawCell[5] = ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
+    private void loadImagesResources() {
+        drawCell =  new Drawable[]{
+                ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null),
+                ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null),
+                ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null),
+                ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null),
+                ResourcesCompat.getDrawable(getResources(), R.drawable.fleisch, null),
+                ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null)
+        };
     }
 
     /**
@@ -74,7 +80,7 @@ public class GameActivity extends AppCompatActivity
     @SuppressLint("NewApi")
     private void designBoard()
     {
-        int sizeofCell = Math.round(ScreenWidth()/ maxX);
+        int sizeofCell = Math.round(app.ScreenWidth()/ maxX);
 
         LinearLayout.LayoutParams lpRow = new LinearLayout.LayoutParams(sizeofCell * maxX, sizeofCell);
         LinearLayout.LayoutParams lpCell = new LinearLayout.LayoutParams(sizeofCell, sizeofCell);
@@ -86,11 +92,11 @@ public class GameActivity extends AppCompatActivity
             LinearLayout linRow = new LinearLayout(context);
             for(int j = 0; j< maxX;j++)
             {
-                playgroundCells[i][j] = new ImageView(context);
-                playgroundCells[i][j].setBackground(drawCell[getRandomInt(0,4)]);
+                playground[i][j] = new ImageView(context);
+                playground[i][j].setBackground(drawCell[getRandomInt(0,4)]);
                 final int y = i;
                 final int x = j;
-                playgroundCells[i][j].setOnClickListener(new View.OnClickListener() {
+                playground[i][j].setOnClickListener(new View.OnClickListener() {
                     /**
                      * - check if first or second move
                      * - if second move, switch images
@@ -113,11 +119,11 @@ public class GameActivity extends AppCompatActivity
 
                             if(checkMove(firstMoveY,firstMoveX,secMoveY,secMoveX))
                             {
-                                tempCell1 = playgroundCells[firstMoveY][firstMoveX].getBackground();
-                                tempCell2 = playgroundCells[secMoveY][secMoveX].getBackground();
+                                tempCell1 = playground[firstMoveY][firstMoveX].getBackground();
+                                tempCell2 = playground[secMoveY][secMoveX].getBackground();
 
-                                playgroundCells[secMoveY][secMoveX].setBackground(tempCell1);
-                                playgroundCells[firstMoveY][firstMoveX].setBackground(tempCell2);
+                                playground[secMoveY][secMoveX].setBackground(tempCell1);
+                                playground[firstMoveY][firstMoveX].setBackground(tempCell2);
                                 listOfPoints = new ArrayList<>();
 
                                 Drawable tempDrawFirstMove = getField(firstMoveY,firstMoveX);
@@ -146,7 +152,7 @@ public class GameActivity extends AppCompatActivity
                         }
                     }
                 });
-                linRow.addView(playgroundCells[i][j], lpCell);
+                linRow.addView(playground[i][j], lpCell);
             }
             if(linBoardGame != null) {
                 linBoardGame.addView(linRow, lpRow);
@@ -154,16 +160,6 @@ public class GameActivity extends AppCompatActivity
         }
     }
 
-    /**
-     *
-     * @return amount of horizontal pixels of the device
-     */
-    private float ScreenWidth()
-    {
-        Resources resources = context.getResources();
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        return dm.widthPixels;
-    }
 
     /**
      * Returns a random number between two parameters
@@ -276,7 +272,7 @@ public class GameActivity extends AppCompatActivity
      */
     private Drawable getField(int poY, int poX)
     {
-        return playgroundCells[poY][poX].getBackground();
+        return playground[poY][poX].getBackground();
     }
 
     /**
@@ -288,7 +284,7 @@ public class GameActivity extends AppCompatActivity
     {
         for(Point Point : listOfPoints)
         {
-            playgroundCells[Point.y][Point.x].setBackground(drawCell[5]);
+            playground[Point.y][Point.x].setBackground(drawCell[5]);
         }
     }
 
@@ -322,10 +318,10 @@ public class GameActivity extends AppCompatActivity
             for(int j = maxY-1; j >= 0; j--)
             {
                 int temp = 2;
-                while(playgroundCells[j][i].getBackground() == drawCell[5])
+                while(playground[j][i].getBackground() == drawCell[5])
                 {
 
-                    if(playgroundCells[maxY-temp][i].getBackground() == drawCell[5] )
+                    if(playground[maxY-temp][i].getBackground() == drawCell[5] )
                     {
                         if(temp >=1) {
 
@@ -336,10 +332,10 @@ public class GameActivity extends AppCompatActivity
                             return;
                         }
                     }
-                    else if(playgroundCells[maxY-temp][i].getBackground() != drawCell[5] )
+                    else if(playground[maxY-temp][i].getBackground() != drawCell[5] )
                     {
-                        playgroundCells[j][i].setBackground(playgroundCells[maxY-temp][i].getBackground());
-                        playgroundCells[maxY-temp][i].setBackground(drawCell[5]);
+                        playground[j][i].setBackground(playground[maxY-temp][i].getBackground());
+                        playground[maxY-temp][i].setBackground(drawCell[5]);
                     }
                 }
 
