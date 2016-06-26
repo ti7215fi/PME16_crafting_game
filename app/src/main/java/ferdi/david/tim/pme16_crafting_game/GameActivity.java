@@ -158,43 +158,29 @@ public class GameActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Drawable tempCell1, tempCell2;
 
-                        if (firstClick) {
+                        if (firstClick)
+                        {
                             firstMoveX = x;
                             firstMoveY = y;
                             firstClick = false;
-                        } else {
+                        }
+                        else
+                        {
                             secMoveX = x;
                             secMoveY = y;
 
-                            if (checkMove(firstMoveY, firstMoveX, secMoveY, secMoveX)) {
+                            if (checkMove(firstMoveY, firstMoveX, secMoveY, secMoveX))
+                            {
                                 tempCell1 = playground[firstMoveY][firstMoveX].getBackground();
                                 tempCell2 = playground[secMoveY][secMoveX].getBackground();
 
                                 playground[secMoveY][secMoveX].setBackground(tempCell1);
                                 playground[firstMoveY][firstMoveX].setBackground(tempCell2);
+
                                 listOfPoints = new ArrayList<>();
-
-                                Drawable tempDrawFirstMove = getField(firstMoveY, firstMoveX);
-                                Drawable tempDrawSecMove = getField(secMoveY, secMoveX);
-
-                                search(tempDrawFirstMove, firstMoveY, firstMoveX);
-                                int amountOfCooFirstMove = listOfPoints.size();
-                                score += amountOfCooFirstMove;
-                                if (amountOfCooFirstMove > 4) // 4 or more connected blocks
-                                {
-                                    whiteOutBlock(listOfPoints);
-                                    listOfPoints.clear();
-                                }
-
-                                search(tempDrawSecMove, secMoveY, secMoveX);  //start recursive search for same color fields
-                                int amountOfCooSectMove = listOfPoints.size();
-                                score += amountOfCooSectMove;
-                                if (amountOfCooSectMove > 4) // 4 or more connected blocks
-                                {
-                                    whiteOutBlock(listOfPoints);
-                                    listOfPoints.clear();
-                                }
-                                //fillWhiteFields();
+                                checkPlayground();
+                                listOfPoints= null;
+                                fillWhiteFields();
                                 updateScoreText(score);
 
                             }
@@ -257,56 +243,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * recursive function looking for fields with same Drawable and add their Points in the list
-     *
-     * @param drawable drawable looking for
-     * @param poY      start position Y
-     * @param poX      start position X
-     * @return true / false
-     */
-    @SuppressLint("NewApi")
-    private boolean search(Drawable drawable, int poY, int poX) {
-        if (getField(poY, poX) != drawable)  // stop if not correct background
-        {
-            return false;
-        }
-        if (containsPoint(listOfPoints, poY, poX))  //   -> prüfe ob feld in der liste if(getField(poY,poX ) == imageResources[5])
-        {
-            return false;
-        }
-        if (getField(poY, poX) == drawable)  //mark as visited
-        {
-            listOfPoints.add(new Point(poX, poY));
-        }
-
-        if (poX >= 1) {
-            if (search(drawable, poY, poX - 1)) {
-                return true;
-            }
-        }
-
-        if (poY < maxY - 1) {
-            if (search(drawable, poY + 1, poX)) {
-                return true;
-            }
-        }
-
-        if (poX < maxX - 1) {
-            if (search(drawable, poY, poX + 1)) {
-                return true;
-            }
-        }
-
-        if (poY >= 1) {
-            if (search(drawable, poY - 1, poX)) {
-                return true;
-            }
-        }
-        listOfPoints.add(new Point(poX, poY));
-        return false;
-    }
-
-    /**
      * @param poY position y of the cell
      * @param poX position x of the cell
      * @return drawable on position y,x
@@ -316,30 +252,17 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * draw all Points in the list white, to mark them to craft
-     *
-     * @param listOfPoints list with Points
-     */
-    @SuppressLint("NewApi")
-    private void whiteOutBlock(List<Point> listOfPoints) {
-        for (Point Point : listOfPoints) {
-            playground[Point.y][Point.x].setBackground(imageResources[5]);
-        }
-    }
-
-    /**
      * function to check the list, if Point is already
      *
-     * @param list list with Points
      * @param posY position y
      * @param posX position x
      * @return true if the list contains the Point
      */
-    private boolean containsPoint(List<Point> list, int posY, int posX) {
-        for (Point Point : list) {
-            if ((Point.y == posY) && (Point.x == posX)) {
-                return true;
-            }
+    private boolean containsPoint(int posY, int posX)
+    {
+        if(listOfPoints.contains(new Point(posY,posX)))
+        {
+            return true;
         }
         return false;
     }
@@ -347,27 +270,77 @@ public class GameActivity extends AppCompatActivity {
     /**
      *
      */
-    @SuppressLint("NewApi")
-    private void fillWhiteFields() {
-        for (int i = 0; i < maxX; i++) {
-            for (int j = maxY - 1; j >= 0; j--) {
-                int temp = 2;
-                while (playground[j][i].getBackground() == imageResources[5]) {
+    private void checkPlayground()
+    {
+        for(int i = 0; i < maxY; i++)
+        {
+            for(int j = 0; j < maxX; j++)
+            {
+                search(i,j);
+            }
+        }
+        whiteOutBlocks();
+    }
 
-                    if (playground[maxY - temp][i].getBackground() == imageResources[5]) {
-                        if (temp >= 1) {
-
-                            temp--;
-                        } else {
-                            return;
-                        }
-                    } else if (playground[maxY - temp][i].getBackground() != imageResources[5]) {
-                        playground[j][i].setBackground(playground[maxY - temp][i].getBackground());
-                        playground[maxY - temp][i].setBackground(imageResources[5]);
-                    }
+    /**
+     *
+     * @param poY
+     * @param poX
+     */
+    private void search(int poY, int poX)
+    {
+        // check vertical
+        if((poY >=1) && (poY < (maxY-1))) {
+            Drawable drawable = getField(poY,poX);
+            if ((getField(poY - 1, poX) == drawable) && (getField(poY + 1, poX) == drawable)) {
+                if (containsPoint(poY - 1, poX)== false) {
+                    listOfPoints.add(new Point(poY - 1, poX));
                 }
-
+                if (containsPoint(poY, poX)== false) {
+                    listOfPoints.add(new Point(poY, poX));
+                }
+                if (containsPoint(poY + 1, poX)== false) {
+                    listOfPoints.add(new Point(poY + 1, poX));
+                }
+            }
+        }
+        // check horizontal
+        if((poX >=1)&&(poX < (maxX-1))) {
+            Drawable drawable = getField(poY,poX);
+            if ((getField(poY, poX - 1) == drawable) && (getField(poY, poX + 1) == drawable)) {
+                if (containsPoint(poY, poX - 1) == false) {
+                    listOfPoints.add(new Point(poY, poX - 1));
+                }
+                if (containsPoint(poY, poX)== false) {
+                    listOfPoints.add(new Point(poY, poX));
+                }
+                if (containsPoint(poY, poX + 1)== false) {
+                    listOfPoints.add(new Point(poY, poX + 1));
+                }
             }
         }
     }
+
+    /**
+     *
+     */
+    @SuppressLint("NewApi")
+    private void whiteOutBlocks() {
+        for (Point Point : listOfPoints) {
+            playground[Point.x][Point.y].setBackground(imageResources[5]);
+        }
+    }
+
+    private void fillWhiteFields()
+    {
+        for(int i = maxY-1; i > 0 ; i--)
+        {
+            for(int j = 0; j < maxX; j++)
+            {
+                Drawable drawable = getField(i,j);
+            }
+        }
+    }
+
+
 }
