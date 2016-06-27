@@ -331,15 +331,43 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("NewApi")
     private void fillWhiteFields()
     {
-        for(int i = maxY-1; i > 0 ; i--)
+        while(checkForWhiteFields()== true)
+        {
+
+            for(int i = maxY-1; i >= 0 ; i--) {
+                for (int j = 0; j < maxX; j++) {
+
+                    if (playground[i][j].getBackground() == imageResources[5])
+                    {
+
+                        //if(i > 0) {
+                            //playground[i][j].setBackground(playground[i - 1][j].getBackground());
+                            //playground[i - 1][j].setBackground(imageResources[5]);
+                        //}
+                        //else {
+                            playground[i][j].setBackground(imageResources[getRandomInt(0, 4)]);
+
+                    }
+                }
+            }
+        }
+    }
+    private boolean checkForWhiteFields()
+    {
+        for(int i = 0; i < maxY; i++)
         {
             for(int j = 0; j < maxX; j++)
             {
-                Drawable drawable = getField(i,j);
+                if(playground[i][j].getBackground() == imageResources[5])
+                {
+                    return true;
+                }
             }
         }
+        return false;
     }
 
 
