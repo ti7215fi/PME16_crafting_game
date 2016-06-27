@@ -108,11 +108,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void updateScoreText(int newScore) {
-        txtScore.setText("Punkte: " + newScore);
+        txtScore.setText(getString(R.string.game_points) + newScore);
     }
 
     private void updateTimeText(int newTime) {
-        txtTime.setText("Zeit: " + newTime + " s");
+        txtTime.setText(getString(R.string.game_time) + newTime + " s");
     }
 
     private void loadImagesResources() {
@@ -145,7 +145,7 @@ public class GameActivity extends AppCompatActivity {
             LinearLayout linRow = new LinearLayout(context);
             for (int j = 0; j < maxX; j++) {
                 playground[i][j] = new ImageView(context);
-                playground[i][j].setBackground(imageResources[getRandomInt(0, 4)]);
+                playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
                 final int y = i;
                 final int x = j;
                 playground[i][j].setOnClickListener(new View.OnClickListener() {
@@ -171,11 +171,11 @@ public class GameActivity extends AppCompatActivity {
 
                             if (checkMove(firstMoveY, firstMoveX, secMoveY, secMoveX))
                             {
-                                tempCell1 = playground[firstMoveY][firstMoveX].getBackground();
-                                tempCell2 = playground[secMoveY][secMoveX].getBackground();
+                                tempCell1 = playground[firstMoveY][firstMoveX].getDrawable();
+                                tempCell2 = playground[secMoveY][secMoveX].getDrawable();
 
-                                playground[secMoveY][secMoveX].setBackground(tempCell1);
-                                playground[firstMoveY][firstMoveX].setBackground(tempCell2);
+                                playground[secMoveY][secMoveX].setImageDrawable(tempCell1);
+                                playground[firstMoveY][firstMoveX].setImageDrawable(tempCell2);
 
                                 listOfPoints = new ArrayList<>();
                                 checkPlayground();
@@ -243,12 +243,12 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     * @param poY position y of the cell
-     * @param poX position x of the cell
+     * @param posY position y of the cell
+     * @param posX position x of the cell
      * @return drawable on position y,x
      */
-    private Drawable getField(int poY, int poX) {
-        return playground[poY][poX].getBackground();
+    private Drawable getField(int posY, int posX) {
+        return playground[posY][posX].getDrawable();
     }
 
     /**
@@ -260,11 +260,7 @@ public class GameActivity extends AppCompatActivity {
      */
     private boolean containsPoint(int posY, int posX)
     {
-        if(listOfPoints.contains(new Point(posY,posX)))
-        {
-            return true;
-        }
-        return false;
+        return listOfPoints.contains(new Point(posY,posX));
     }
 
     /**
@@ -284,38 +280,38 @@ public class GameActivity extends AppCompatActivity {
 
     /**
      *
-     * @param poY
-     * @param poX
+     * @param posY position x
+     * @param posX position y
      */
-    private void search(int poY, int poX)
+    private void search(int posY, int posX)
     {
         // check vertical
-        if((poY >=1) && (poY < (maxY-1))) {
-            Drawable drawable = getField(poY,poX);
-            if ((getField(poY - 1, poX) == drawable) && (getField(poY + 1, poX) == drawable)) {
-                if (containsPoint(poY - 1, poX)== false) {
-                    listOfPoints.add(new Point(poY - 1, poX));
+        if((posY >=1) && (posY < (maxY-1))) {
+            Drawable drawable = getField(posY,posX);
+            if ((getField(posY - 1, posX) == drawable) && (getField(posY + 1, posX) == drawable)) {
+                if (!containsPoint(posY - 1, posX)) {
+                    listOfPoints.add(new Point(posY - 1, posX));
                 }
-                if (containsPoint(poY, poX)== false) {
-                    listOfPoints.add(new Point(poY, poX));
+                if (!containsPoint(posY, posX)) {
+                    listOfPoints.add(new Point(posY, posX));
                 }
-                if (containsPoint(poY + 1, poX)== false) {
-                    listOfPoints.add(new Point(poY + 1, poX));
+                if (!containsPoint(posY + 1, posX)) {
+                    listOfPoints.add(new Point(posY + 1, posX));
                 }
             }
         }
         // check horizontal
-        if((poX >=1)&&(poX < (maxX-1))) {
-            Drawable drawable = getField(poY,poX);
-            if ((getField(poY, poX - 1) == drawable) && (getField(poY, poX + 1) == drawable)) {
-                if (containsPoint(poY, poX - 1) == false) {
-                    listOfPoints.add(new Point(poY, poX - 1));
+        if((posX >=1)&&(posX < (maxX-1))) {
+            Drawable drawable = getField(posY,posX);
+            if ((getField(posY, posX - 1) == drawable) && (getField(posY, posX + 1) == drawable)) {
+                if (!containsPoint(posY, posX - 1)) {
+                    listOfPoints.add(new Point(posY, posX - 1));
                 }
-                if (containsPoint(poY, poX)== false) {
-                    listOfPoints.add(new Point(poY, poX));
+                if (!containsPoint(posY, posX)) {
+                    listOfPoints.add(new Point(posY, posX));
                 }
-                if (containsPoint(poY, poX + 1)== false) {
-                    listOfPoints.add(new Point(poY, poX + 1));
+                if (!containsPoint(posY, posX + 1)) {
+                    listOfPoints.add(new Point(posY, posX + 1));
                 }
             }
         }
@@ -327,7 +323,7 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private void whiteOutBlocks() {
         for (Point Point : listOfPoints) {
-            playground[Point.x][Point.y].setBackground(imageResources[5]);
+            playground[Point.x][Point.y].setImageDrawable(imageResources[5]);
         }
     }
 

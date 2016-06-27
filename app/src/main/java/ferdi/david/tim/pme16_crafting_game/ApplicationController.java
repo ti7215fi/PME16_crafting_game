@@ -8,8 +8,6 @@ import com.orm.SugarApp;
  * Created by Tim Fischer on 07.06.2016.
  */
 public class ApplicationController extends SugarApp{
-
-    private static ApplicationController    app = null;
     private LevelManager                    levelManager = LevelManager.getInstance();
 
     public LevelManager getLevelManager() {
