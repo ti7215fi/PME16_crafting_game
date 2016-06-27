@@ -336,7 +336,7 @@ public class GameActivity extends AppCompatActivity {
             for(int i = maxY-1; i >= 0 ; i--) {
                 for (int j = 0; j < maxX; j++) {
 
-                    if (playground[i][j].getBackground() == imageResources[5])
+                    if (playground[i][j].getDrawable() == imageResources[5])
                     {
 
                         //if(i > 0) {
@@ -344,7 +344,7 @@ public class GameActivity extends AppCompatActivity {
                             //playground[i - 1][j].setBackground(imageResources[5]);
                         //}
                         //else {
-                            playground[i][j].setBackground(imageResources[getRandomInt(0, 4)]);
+                            playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
 
                     }
                 }
@@ -357,7 +357,7 @@ public class GameActivity extends AppCompatActivity {
         {
             for(int j = 0; j < maxX; j++)
             {
-                if(playground[i][j].getBackground() == imageResources[5])
+                if(playground[i][j].getDrawable() == imageResources[5])
                 {
                     return true;
                 }
