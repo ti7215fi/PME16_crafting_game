@@ -8,16 +8,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ferdi.david.tim.pme16_crafting_game.MainActivity"
-    android:background="@android:color/holo_orange_light">
+    android:background="@mipmap/start_screen">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/bnt_start"
+        android:layout_marginTop="91dp"
+        android:id="@+id/bntStart"
+        android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="89dp"
-        android:id="@+id/bntStart"/>
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -25,18 +26,23 @@
         android:text="@string/bnt_highscore"
         android:id="@+id/btnHighscore"
         android:layout_below="@+id/bntStart"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp" />
+        android:layout_marginTop="29dp"
+        android:layout_alignStart="@id/bntStart"
+        android:layout_alignLeft="@+id/bntStart"
+        android:layout_centerInParent="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_login"
         android:id="@+id/btnLogin"
-        android:layout_marginTop="34dp"
+        android:layout_marginTop="29dp"
         android:layout_below="@+id/btnInventory"
         android:layout_alignLeft="@+id/btnHighscore"
-        android:layout_alignStart="@+id/btnHighscore" />
+        android:layout_alignStart="@id/btnInventory"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/btnInventory"
+        android:layout_alignEnd="@+id/btnInventory" />
 
     <Button
         android:layout_width="wrap_content"
@@ -44,5 +50,9 @@
         android:text="@string/btn_inventory"
         android:id="@+id/btnInventory"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignLeft="@+id/btnHighscore"
+        android:layout_alignStart="@+id/btnHighscore"
+        android:layout_alignRight="@+id/btnHighscore"
+        android:layout_alignEnd="@+id/btnHighscore" />
+
 </RelativeLayout>
