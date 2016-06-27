@@ -178,9 +178,17 @@ public class GameActivity extends AppCompatActivity {
                                 playground[firstMoveY][firstMoveX].setImageDrawable(tempCell2);
 
                                 listOfPoints = new ArrayList<>();
-                                checkPlayground();
-                                listOfPoints= null;
-                                fillWhiteFields();
+                                do {
+                                    listOfPoints.clear();
+                                    checkPlayground();
+                                    fillWhiteFields();
+                                }while(listOfPoints.size()!=0);
+
+                                listOfPoints.clear();
+
+
+
+
                                 updateScoreText(score);
 
                             }
@@ -264,7 +272,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * check every field with search
      */
     private void checkPlayground()
     {
@@ -279,7 +287,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * check field and the field y+1/-1 and x+1/-1 if there are 3 Blocks together. Add the coordinates
+     * to the list
      * @param posY position x
      * @param posX position y
      */
@@ -318,7 +327,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * mark all fields form the list of coordinates with with background
      */
     @SuppressLint("NewApi")
     private void whiteOutBlocks() {
@@ -327,6 +336,10 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * go through th playground and switch blocks to replace white fields with blocks above or
+     * new random fields
+     */
     @SuppressLint("NewApi")
     private void fillWhiteFields()
     {
@@ -351,6 +364,11 @@ public class GameActivity extends AppCompatActivity {
             }
         }
     }
+
+    /**
+     * going through the field to find at least one white field
+     * @return true, if there is at least one white block; false, if there is no white fields
+     */
     private boolean checkForWhiteFields()
     {
         for(int i = 0; i < maxY; i++)
