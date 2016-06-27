@@ -1,13 +1,13 @@
 package ferdi.david.tim.pme16_crafting_game;
 
-import android.app.Application;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import com.orm.SugarApp;
 
 /**
  * Created by Tim Fischer on 07.06.2016.
  */
-public class ApplicationController extends Application{
+public class ApplicationController extends SugarApp{
 
     private static ApplicationController    app = null;
     private LevelManager                    levelManager = LevelManager.getInstance();
