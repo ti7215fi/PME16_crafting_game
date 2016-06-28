@@ -345,20 +345,19 @@ public class GameActivity extends AppCompatActivity {
     {
         while(checkForWhiteFields()== true)
         {
-
             for(int i = maxY-1; i >= 0 ; i--) {
                 for (int j = 0; j < maxX; j++) {
 
                     if (playground[i][j].getDrawable() == imageResources[5])
                     {
 
-                        //if(i > 0) {
-                            //playground[i][j].setBackground(playground[i - 1][j].getBackground());
-                            //playground[i - 1][j].setBackground(imageResources[5]);
-                        //}
-                        //else {
+                        if(i != 0) {
+                            playground[i][j].setImageDrawable(playground[i - 1][j].getDrawable());
+                            playground[i - 1][j].setImageDrawable(imageResources[5]);
+                        }
+                        else {
                             playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
-
+                        }
                     }
                 }
             }
@@ -383,6 +382,4 @@ public class GameActivity extends AppCompatActivity {
         }
         return false;
     }
-
-
 }
