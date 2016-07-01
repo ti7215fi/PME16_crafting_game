@@ -382,4 +382,69 @@ public class GameActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    private boolean checkForLockedPlayground()
+    {
+        for(int i = 0; i < maxY; i++)
+        {
+            for(int j = 0; j < maxX; j++)
+            {
+                Drawable drawable = getField(i,j);
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                ///#
+                ///#
+                //#
+                if((i >=1 && i < (maxY -1))&&(j >=1 && j < (maxX-1)))
+                {
+                    if(playground[i-1][j].getDrawable() == drawable) // eins drüber
+                    {
+                        if(playground[i+1][j-1].getDrawable() == drawable) // einsrunter links
+                        {
+                            return true;
+                        }
+                        else if(playground[i+1][j+1].getDrawable() == drawable) // einsrunter rechts
+                        {
+                            return true;
+                        }
+                    }
+                }
+                if(playground[i+1][j].getDrawable() == drawable) // eins drunter
+                {
+                    if(playground[i-1][j-1].getDrawable() == drawable) // einshoch links
+                    {
+                        return true;
+                    }
+                    else if(playground[i-1][j+1].getDrawable() == drawable) // einshoch rechts
+                    {
+                        return true;
+                    }
+                }
+                if(playground[i][j+1].getDrawable() == drawable) // eins rechst
+                {
+                    if(playground[i+1][j-1].getDrawable() == drawable) // einshoch links
+                    {
+                        return true;
+                    }
+                    else if(playground[i-1][j-1].getDrawable() == drawable) // einshoch rechts
+                    {
+                        return true;
+                    }
+                }
+                if(playground[i][j-1].getDrawable() == drawable) // eins links
+                {
+                    if(playground[i+1][j+1].getDrawable() == drawable) // einshoch links
+                    {
+                        return true;
+                    }
+                    else if(playground[i-1][j+1].getDrawable() == drawable) // einshoch rechts
+                    {
+                        return true;
+                    }
+                }
+
+            }
+        }
+
+        return false;
+    }
 }
