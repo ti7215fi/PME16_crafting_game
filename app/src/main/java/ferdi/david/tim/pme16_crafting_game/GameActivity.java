@@ -23,8 +23,8 @@ public class GameActivity extends AppCompatActivity {
     private ApplicationController   app;
     private static final String     LOG_TAG = MainActivity.class.getSimpleName();
 
-    private int                     maxX;  // amount of cells
-    private int                     maxY; // amount of rows
+    private int                     maxX = 7;  // amount of cells
+    private int                     maxY = 7; // amount of rows
 
     private ImageView[][]           playground;
     private Context                 context;
@@ -64,12 +64,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         app = (ApplicationController) getApplication();
-        app.getLevelManager().setCurrentLevel(app.getLevelManager().getLevel(1));
-
-        maxX = app.getLevelManager().getCurrentLevel().getColCount();
-        maxY = app.getLevelManager().getCurrentLevel().getRowCount();
-
-        playground = app.getLevelManager().getCurrentLevel().getPlayground();
+        playground = new ImageView[maxX][maxY];
 
         context = this;
 

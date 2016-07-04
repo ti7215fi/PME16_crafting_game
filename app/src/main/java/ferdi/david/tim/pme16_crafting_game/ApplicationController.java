@@ -8,12 +8,6 @@ import com.orm.SugarApp;
  * Created by Tim Fischer on 07.06.2016.
  */
 public class ApplicationController extends SugarApp{
-    private LevelManager                    levelManager = LevelManager.getInstance();
-
-    public LevelManager getLevelManager() {
-        return levelManager;
-    }
-
     /**
      * @return amount of horizontal pixels of the device
      */
