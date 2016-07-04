@@ -21,6 +21,7 @@ import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity {
     private ApplicationController   app;
+    private static final String     LOG_TAG = MainActivity.class.getSimpleName();
 
     private int                     maxX;  // amount of cells
     private int                     maxY; // amount of rows
@@ -121,7 +122,7 @@ public class GameActivity extends AppCompatActivity {
                 ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null),
                 ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null),
                 ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null),
-                ResourcesCompat.getDrawable(getResources(), R.drawable.fleisch, null),
+                ResourcesCompat.getDrawable(getResources(), R.mipmap.meat, null),
                 ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null)
         };
     }
@@ -136,8 +137,8 @@ public class GameActivity extends AppCompatActivity {
     private void designBoard() {
         int sizeofCell = Math.round(app.ScreenWidth() / maxX);
 
-        LinearLayout.LayoutParams lpRow = new LinearLayout.LayoutParams(sizeofCell * maxX, sizeofCell);
-        LinearLayout.LayoutParams lpCell = new LinearLayout.LayoutParams(sizeofCell, sizeofCell);
+        //LinearLayout.LayoutParams lpRow = new LinearLayout.LayoutParams(sizeofCell * maxX, sizeofCell);
+        //LinearLayout.LayoutParams lpCell = new LinearLayout.LayoutParams(sizeofCell, sizeofCell);
 
         LinearLayout linBoardGame = (LinearLayout) findViewById(R.id.linBoardGame);
 
@@ -145,6 +146,7 @@ public class GameActivity extends AppCompatActivity {
             LinearLayout linRow = new LinearLayout(context);
             for (int j = 0; j < maxX; j++) {
                 playground[i][j] = new ImageView(context);
+                playground[i][j].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
                 playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
                 final int y = i;
                 final int x = j;
@@ -186,9 +188,6 @@ public class GameActivity extends AppCompatActivity {
 
                                 listOfPoints.clear();
 
-
-
-
                                 updateScoreText(score);
 
                             }
@@ -196,10 +195,10 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                 });
-                linRow.addView(playground[i][j], lpCell);
+                linRow.addView(playground[i][j]);
             }
             if (linBoardGame != null) {
-                linBoardGame.addView(linRow, lpRow);
+                linBoardGame.addView(linRow);
             }
         }
     }
@@ -343,7 +342,7 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private void fillWhiteFields()
     {
-        while(checkForWhiteFields()== true)
+        while(checkForWhiteFields())
         {
             for(int i = maxY-1; i >= 0 ; i--) {
                 for (int j = 0; j < maxX; j++) {

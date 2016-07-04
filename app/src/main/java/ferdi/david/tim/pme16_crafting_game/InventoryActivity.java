@@ -21,7 +21,7 @@ import android.widget.TextView;
 public class InventoryActivity extends AppCompatActivity {
 
     private GridView    inventoryGridView;
-    private int         items[] = {R.mipmap.wood, R.mipmap.stone, R.mipmap.ore, R.mipmap.cotton} ;
+    private int         items[] = {R.mipmap.wood, R.mipmap.stone, R.mipmap.ore, R.mipmap.cotton, R.mipmap.meat} ;
     private float       height;
     private float       width;
 
@@ -72,12 +72,8 @@ public class InventoryActivity extends AppCompatActivity {
         //---returns an ImageView view---
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            int cellSize = (int) width / (inventoryGridView.getNumColumns() * 2);
-            int cellMarginLeft = cellSize / 2;
             View row = convertView;
             Holder holder;
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(cellSize, cellSize);
-            layoutParams.setMargins(cellMarginLeft,0,0,0);
 
             if (convertView == null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
@@ -93,7 +89,6 @@ public class InventoryActivity extends AppCompatActivity {
                 holder = (Holder) row.getTag();
             }
             holder.textView.setText("0x");
-            holder.imageView.setLayoutParams(layoutParams);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.imageView.setImageResource(items[position]);
 
