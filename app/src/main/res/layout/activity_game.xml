@@ -45,7 +45,8 @@
         android:id="@+id/linBoardGame"
         android:orientation="vertical"
         android:layout_below="@+id/linMenu"
-        android:background="@drawable/grassland">
+        android:background="@drawable/grassland"
+        android:gravity="center_horizontal">
 
     </LinearLayout>
 

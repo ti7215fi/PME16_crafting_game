@@ -46,8 +46,8 @@ public class LevelManager {
 
     // available levels
     private ImageView[][] levelOne() {
-        int rowCount = 8;
-        int colCount = 8;
+        int rowCount = 7;
+        int colCount = 7;
         return new ImageView[rowCount][colCount];
     }
 

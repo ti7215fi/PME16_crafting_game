@@ -13,8 +13,8 @@ public class Level {
     private final int       rowCount;
 
     public Level(ImageView[][] _playground, int _levelNumber) {
-        colCount = 8;
-        rowCount = 8;
+        colCount = 7;
+        rowCount = 7;
         playground = _playground;
         levelNumber = _levelNumber;
     }
