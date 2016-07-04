@@ -10,57 +10,49 @@ import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity implements Validator.ValidationListener{
+public class RegistrationActivity extends AppCompatActivity implements Button.OnClickListener, Validator.ValidationListener {
 
-    private Validator validator;
+    Validator validator;
 
-    // UI references
-    private Button  btnLogin;
-    private Button.OnClickListener loginOnClickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //ToDo: login; read user from db
-            validator.validate();
-        }
-    };
-
-    private Button  btnRegister;
-    private Button.OnClickListener registerOnClickListener = new Button.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(LoginActivity.this, RegistrationActivity.class);
-            startActivity(i);
-        }
-    };
+    Button btnRegister;
 
     @NotEmpty
-    private EditText etUsername;
+    EditText etUsername;
 
     @NotEmpty
     @Password(min = 6, scheme = Password.Scheme.ANY)
-    private EditText etPassword;
+    EditText etPassword;
+
+    @NotEmpty
+    @ConfirmPassword
+    EditText etPasswordConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registration);
 
-        btnLogin = (Button) findViewById(R.id.btnSignUp);
-        btnLogin.setOnClickListener(loginOnClickListener);
-
-        btnRegister = (Button) findViewById(R.id.btnSignIn);
-        btnRegister.setOnClickListener(registerOnClickListener);
+        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnRegister.setOnClickListener(this);
 
         validator = new Validator(this);
         validator.setValidationListener(this);
 
-        etUsername = (EditText) findViewById(R.id.username_login);
-        etPassword = (EditText) findViewById(R.id.password_login);
+        etUsername = (EditText) findViewById(R.id.username_register);
+        etPassword = (EditText) findViewById(R.id.password_register);
+        etPasswordConfirm = (EditText) findViewById(R.id.password_confirm_register);
+    }
+
+    @Override
+    public void onClick(View v) {
+        validator.validate();
+        //ToDo: check if user exists; register new user;
     }
 
     @Override

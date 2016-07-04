@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="ferdi.david.tim.pme16_crafting_game.RegistrationActivity">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/registration"
+            android:id="@+id/txt_registration"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_register"
+        android:layout_gravity="center_horizontal"
+        android:inputType="text"
+        android:layout_margin="20dp"
+        android:editable="false"
+        android:hint="@string/placeholder_username" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/password_register"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:hint="@string/placeholder_password" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/password_confirm_register"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:hint="@string/placeholder_password_confirm" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:id="@+id/btnRegister"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp" />
+
+</LinearLayout>

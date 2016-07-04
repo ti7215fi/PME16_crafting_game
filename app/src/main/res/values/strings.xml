@@ -19,11 +19,18 @@
     <!-- Strings related to inventory -->
     <string name="inventory_heading">Inventar</string>
 
+    <!-- Strings related to registration -->
+    <string name="registration">Registrierung</string>
+    <string name="register">Registrieren</string>
+    <string name="placeholder_username">Benutzername</string>
+    <string name="placeholder_password">Passwort</string>
+    <string name="placeholder_password_confirm">Passwort bestätigen</string>
+
     <!-- Strings related to login -->
     <string name="login">Login</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
+    <string name="prompt_password">Passwort</string>
+    <string name="action_sign_in">Login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
@@ -32,4 +39,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
