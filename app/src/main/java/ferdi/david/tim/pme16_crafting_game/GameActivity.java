@@ -32,7 +32,7 @@ public class GameActivity extends AppCompatActivity {
     private int[][]                 dbPlayground;
     private Context                 context;
     private Drawable[]              imageResources;
-    private List<Point>             listOfPoints = new ArrayList<>();
+    private List<ExtendedCoordinate>             listOfPoints = new ArrayList<>();
 
     private boolean                 firstClick = true;
     private int                     firstMoveX;
@@ -79,8 +79,8 @@ public class GameActivity extends AppCompatActivity {
         timer = new Timer();
 
         loadImagesResources();
-        designBoard();
         initInventory();
+        designBoard();
 
         if(this.app.getUser() != null && this.app.getUser().getGame() != null) {
             Log.i(LOG_TAG, "Spielfeld vorhanden || " + this.app.getUser().getGame().getPlayground() );
@@ -204,6 +204,7 @@ public class GameActivity extends AppCompatActivity {
                                     listOfPoints.clear();
                                     checkPlayground();
                                     fillWhiteFields();
+                                    saveResourcesToInventory();
                                 }while(listOfPoints.size()!=0);
 
                                 listOfPoints.clear();
@@ -295,7 +296,16 @@ public class GameActivity extends AppCompatActivity {
      */
     private boolean containsPoint(int posY, int posX)
     {
-        return listOfPoints.contains(new Point(posY,posX));
+        for(int i = 0; i< listOfPoints.size(); i++)
+        {
+            ExtendedCoordinate ec = listOfPoints.get(i);
+            if((ec.getPointY() == posY) && (ec.getPointX() == posX))
+            {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     /**
@@ -326,13 +336,13 @@ public class GameActivity extends AppCompatActivity {
             Drawable drawable = getField(posY,posX);
             if ((getField(posY - 1, posX) == drawable) && (getField(posY + 1, posX) == drawable)) {
                 if (!containsPoint(posY - 1, posX)) {
-                    listOfPoints.add(new Point(posY - 1, posX));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY - 1, posX),drawable));
                 }
                 if (!containsPoint(posY, posX)) {
-                    listOfPoints.add(new Point(posY, posX));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY, posX),drawable));
                 }
                 if (!containsPoint(posY + 1, posX)) {
-                    listOfPoints.add(new Point(posY + 1, posX));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY + 1, posX),drawable));
                 }
             }
         }
@@ -341,13 +351,13 @@ public class GameActivity extends AppCompatActivity {
             Drawable drawable = getField(posY,posX);
             if ((getField(posY, posX - 1) == drawable) && (getField(posY, posX + 1) == drawable)) {
                 if (!containsPoint(posY, posX - 1)) {
-                    listOfPoints.add(new Point(posY, posX - 1));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY, posX - 1),drawable));
                 }
                 if (!containsPoint(posY, posX)) {
-                    listOfPoints.add(new Point(posY, posX));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY, posX),drawable));
                 }
                 if (!containsPoint(posY, posX + 1)) {
-                    listOfPoints.add(new Point(posY, posX + 1));
+                    listOfPoints.add(new ExtendedCoordinate(new Point(posY, posX + 1),drawable));
                 }
             }
         }
@@ -358,8 +368,8 @@ public class GameActivity extends AppCompatActivity {
      */
     @SuppressLint("NewApi")
     private void whiteOutBlocks() {
-        for (Point Point : listOfPoints) {
-            playground[Point.x][Point.y].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
+        for (ExtendedCoordinate point : listOfPoints) {
+            playground[point.getPointX()][point.getPointY()].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
         }
     }
 
@@ -410,69 +420,88 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
-    private boolean checkForLockedPlayground()
+    /**
+     *count the collected resources and multiply with calculated value
+     * than add the value to values in the database
+     */
+    private void saveResourcesToInventory()
     {
-        for(int i = 0; i < maxY; i++)
+        if(listOfPoints.size() !=0)
         {
-            for(int j = 0; j < maxX; j++)
-            {
-                Drawable drawable = getField(i,j);
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                ///#
-                ///#
-                //#
-                if((i >=1 && i < (maxY -1))&&(j >=1 && j < (maxX-1)))
+            int amountOfWood = 0;
+            int amountOfMeat = 0;
+            int amountOfCotton = 0;
+            int amountOfStone = 0;
+            int amountOfOre = 0;
+            for (ExtendedCoordinate point : listOfPoints) {
+                if(point.getDrawable() == imageResources[EResourceType.WOOD.getValue()] )
                 {
-                    if(playground[i-1][j].getDrawable() == drawable) // eins drüber
-                    {
-                        if(playground[i+1][j-1].getDrawable() == drawable) // einsrunter links
-                        {
-                            return true;
-                        }
-                        else if(playground[i+1][j+1].getDrawable() == drawable) // einsrunter rechts
-                        {
-                            return true;
-                        }
-                    }
+                    amountOfWood +=1;
                 }
-                if(playground[i+1][j].getDrawable() == drawable) // eins drunter
+                else if(point.getDrawable() == imageResources[EResourceType.COTTON.getValue()] )
                 {
-                    if(playground[i-1][j-1].getDrawable() == drawable) // einshoch links
-                    {
-                        return true;
-                    }
-                    else if(playground[i-1][j+1].getDrawable() == drawable) // einshoch rechts
-                    {
-                        return true;
-                    }
+                    amountOfCotton +=1;
                 }
-                if(playground[i][j+1].getDrawable() == drawable) // eins rechst
+                else if(point.getDrawable() == imageResources[EResourceType.MEAT.getValue()] )
                 {
-                    if(playground[i+1][j-1].getDrawable() == drawable) // einshoch links
-                    {
-                        return true;
-                    }
-                    else if(playground[i-1][j-1].getDrawable() == drawable) // einshoch rechts
-                    {
-                        return true;
-                    }
+                    amountOfMeat +=1;
                 }
-                if(playground[i][j-1].getDrawable() == drawable) // eins links
+                else if(point.getDrawable() == imageResources[EResourceType.ORE.getValue()] )
                 {
-                    if(playground[i+1][j+1].getDrawable() == drawable) // einshoch links
-                    {
-                        return true;
-                    }
-                    else if(playground[i-1][j+1].getDrawable() == drawable) // einshoch rechts
-                    {
-                        return true;
-                    }
+                    amountOfOre +=1;
                 }
-
+                else if(point.getDrawable() == imageResources[EResourceType.STONE.getValue()] )
+                {
+                    amountOfStone +=1;
+                }
             }
-        }
+            int a = 0;
+            amountOfCotton *= multiplicator(amountOfCotton);
+            amountOfMeat *= multiplicator(amountOfMeat);
+            amountOfWood *= multiplicator(amountOfWood);
+            amountOfStone *= multiplicator(amountOfStone);
+            amountOfOre *= multiplicator(amountOfOre);
 
-        return false;
+            DBResource cotton = this.app.getUser().getInventory().get(EResourceType.COTTON.getValue() -1);
+            DBResource ore = this.app.getUser().getInventory().get(EResourceType.ORE.getValue() -1);
+            DBResource stone = this.app.getUser().getInventory().get(EResourceType.STONE.getValue() -1);
+            DBResource wood = this.app.getUser().getInventory().get(EResourceType.WOOD.getValue() -1);
+            DBResource meat = this.app.getUser().getInventory().get(EResourceType.MEAT.getValue() -1);
+
+            cotton.setAmount(cotton.getAmount() + amountOfCotton);
+            ore.setAmount(ore.getAmount() + amountOfOre);
+            stone.setAmount(stone.getAmount() + amountOfStone);
+            wood.setAmount(wood.getAmount() + amountOfWood);
+            meat.setAmount(meat.getAmount() + amountOfMeat);
+
+            cotton.save();
+            ore.save();
+            stone.save();
+            wood.save();
+            meat.save();
+        }
+    }
+
+    /**
+     * calculate the multiplicator for the collected item
+     * @param amountOf the amount of collected items of a resource
+     * @return new amount of items
+     */
+    private int multiplicator(int amountOf)
+    {
+        if(amountOf == 3)
+        {
+            return 1;
+        }
+        else if(amountOf == 4)
+        {
+            return 2;
+        }
+        if(amountOf > 4)
+        {
+            return 3;
+        }
+        return 1;
     }
 
 }

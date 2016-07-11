@@ -21,9 +21,10 @@ import android.widget.TextView;
 public class InventoryActivity extends AppCompatActivity {
 
     private GridView    inventoryGridView;
-    private int         items[] = {R.mipmap.wood, R.mipmap.stone, R.mipmap.ore, R.mipmap.cotton, R.mipmap.meat} ;
+    private int         items[] = {R.mipmap.stone, R.mipmap.ore, R.mipmap.cotton, R.mipmap.wood, R.mipmap.meat} ;
     private float       height;
     private float       width;
+    private ApplicationController app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class InventoryActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_inventory);
+
+        app = (ApplicationController) getApplication();
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -88,7 +91,12 @@ public class InventoryActivity extends AppCompatActivity {
             } else {
                 holder = (Holder) row.getTag();
             }
-            holder.textView.setText("0x");
+
+            int amountOfItem = 0;
+            if(app.getUser() != null && app.getUser().getInventory() != null) {
+                amountOfItem = app.getUser().getInventory().get(position).getAmount();
+            }
+            holder.textView.setText(amountOfItem + " x");
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.imageView.setImageResource(items[position]);
 
