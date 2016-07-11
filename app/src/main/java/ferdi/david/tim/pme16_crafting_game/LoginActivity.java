@@ -3,6 +3,7 @@ package ferdi.david.tim.pme16_crafting_game;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,9 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements Validator.ValidationListener{
 
+    private ApplicationController app;
+    private static final String     LOG_TAG = LoginActivity.class.getSimpleName();
+
     private Validator validator;
 
     // UI references
@@ -24,7 +28,6 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
     private Button.OnClickListener loginOnClickListener = new Button.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //ToDo: login; read user from db
             validator.validate();
         }
     };
@@ -50,11 +53,17 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        app = (ApplicationController) getApplication();
+
         btnLogin = (Button) findViewById(R.id.btnSignUp);
-        btnLogin.setOnClickListener(loginOnClickListener);
+        if(btnLogin != null) {
+            btnLogin.setOnClickListener(loginOnClickListener);
+        }
 
         btnRegister = (Button) findViewById(R.id.btnSignIn);
-        btnRegister.setOnClickListener(registerOnClickListener);
+        if(btnRegister != null) {
+            btnRegister.setOnClickListener(registerOnClickListener);
+        }
 
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -65,7 +74,14 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
     @Override
     public void onValidationSucceeded() {
-        Toast.makeText(this, "Yay! we got it right!", Toast.LENGTH_SHORT).show();
+        List<DBUser> userList = DBUser.find(DBUser.class,"username = ?", etUsername.getText().toString());
+        if(userList.size() == 1 && userList.get(0).getPassword().equals(etPassword.getText().toString())) {
+           app.setUser(userList.get(0));
+           Toast.makeText(this, "Erfolgreich eingeloggt!", Toast.LENGTH_SHORT).show();
+            this.finish();
+        } else {
+            Toast.makeText(this, "Benutzer existiert nicht oder das Passwort ist falsch!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

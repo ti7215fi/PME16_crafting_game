@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -27,6 +29,7 @@ public class GameActivity extends AppCompatActivity {
     private int                     maxY = 7; // amount of rows
 
     private ImageView[][]           playground;
+    private int[][]                 dbPlayground;
     private Context                 context;
     private Drawable[]              imageResources;
     private List<Point>             listOfPoints = new ArrayList<>();
@@ -65,6 +68,7 @@ public class GameActivity extends AppCompatActivity {
 
         app = (ApplicationController) getApplication();
         playground = new ImageView[maxX][maxY];
+        dbPlayground = new int[maxX][maxY];
 
         context = this;
 
@@ -73,28 +77,37 @@ public class GameActivity extends AppCompatActivity {
 
         txtTime = (TextView) findViewById(R.id.txt_time);
         timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 1000, 1000);
 
         loadImagesResources();
         designBoard();
+        initInventory();
+
+        if(this.app.getUser() != null && this.app.getUser().getGame() != null) {
+            Log.i(LOG_TAG, "Spielfeld vorhanden || " + this.app.getUser().getGame().getPlayground() );
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        timer.cancel();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        timer.scheduleAtFixedRate(timerTask, 1000, 1000);
     }
 
+    @Override
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState( state );
         state.putInt("score", score);
         state.putInt("time", time);
     }
+
+    @Override
     protected void onRestoreInstanceState(Bundle state)
     {
         super.onRestoreInstanceState( state );
@@ -112,14 +125,29 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void loadImagesResources() {
-        imageResources = new Drawable[]{
-                ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null),
-                ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null),
-                ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null),
-                ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null),
-                ResourcesCompat.getDrawable(getResources(), R.mipmap.meat, null),
-                ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null)
-        };
+        imageResources = new Drawable[6];
+        imageResources[EResourceType.NONE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
+        imageResources[EResourceType.STONE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null);
+        imageResources[EResourceType.ORE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null);
+        imageResources[EResourceType.COTTON.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null);
+        imageResources[EResourceType.WOOD.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null);
+        imageResources[EResourceType.MEAT.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.meat, null);
+    }
+
+    /**
+     * - init the inventory, if no one exists
+     */
+    private void initInventory() {
+        if(this.app.getUser() != null) {
+            if(this.app.getUser().getInventory().size() == 0) {
+                for (EResourceType resource : EResourceType.values()) {
+                    if(resource != EResourceType.NONE) {
+                        DBResource newResource = new DBResource(resource.getValue(), this.app.getUser());
+                        newResource.save();
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -130,19 +158,16 @@ public class GameActivity extends AppCompatActivity {
      */
     @SuppressLint("NewApi")
     private void designBoard() {
-        int sizeofCell = Math.round(app.ScreenWidth() / maxX);
-
-        //LinearLayout.LayoutParams lpRow = new LinearLayout.LayoutParams(sizeofCell * maxX, sizeofCell);
-        //LinearLayout.LayoutParams lpCell = new LinearLayout.LayoutParams(sizeofCell, sizeofCell);
-
         LinearLayout linBoardGame = (LinearLayout) findViewById(R.id.linBoardGame);
 
         for (int i = 0; i < maxY; i++) {
             LinearLayout linRow = new LinearLayout(context);
             for (int j = 0; j < maxX; j++) {
+                int randomResource = getRandomInt(1, 5);
+                dbPlayground[i][j] = randomResource;
                 playground[i][j] = new ImageView(context);
                 playground[i][j].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
+                playground[i][j].setImageDrawable(imageResources[randomResource]);
                 final int y = i;
                 final int x = j;
                 playground[i][j].setOnClickListener(new View.OnClickListener() {
@@ -195,6 +220,14 @@ public class GameActivity extends AppCompatActivity {
             if (linBoardGame != null) {
                 linBoardGame.addView(linRow);
             }
+        }
+
+        if(this.app.getUser() != null && this.app.getUser().getGame() == null) {
+            DBGame newGame = new DBGame();
+            newGame.setUser(this.app.getUser());
+            newGame.setPlayground(dbPlayground);
+            newGame.save();
+            Log.i(LOG_TAG, "Spiel gesichert || " + this.app.getUser().getGame().getPlayground() );
         }
     }
 
@@ -326,7 +359,7 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private void whiteOutBlocks() {
         for (Point Point : listOfPoints) {
-            playground[Point.x][Point.y].setImageDrawable(imageResources[5]);
+            playground[Point.x][Point.y].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
         }
     }
 
@@ -342,15 +375,15 @@ public class GameActivity extends AppCompatActivity {
             for(int i = maxY-1; i >= 0 ; i--) {
                 for (int j = 0; j < maxX; j++) {
 
-                    if (playground[i][j].getDrawable() == imageResources[5])
+                    if (playground[i][j].getDrawable() == imageResources[EResourceType.NONE.getValue()])
                     {
 
                         if(i != 0) {
                             playground[i][j].setImageDrawable(playground[i - 1][j].getDrawable());
-                            playground[i - 1][j].setImageDrawable(imageResources[5]);
+                            playground[i - 1][j].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
                         }
                         else {
-                            playground[i][j].setImageDrawable(imageResources[getRandomInt(0, 4)]);
+                            playground[i][j].setImageDrawable(imageResources[getRandomInt(1, 5)]);
                         }
                     }
                 }
@@ -368,7 +401,7 @@ public class GameActivity extends AppCompatActivity {
         {
             for(int j = 0; j < maxX; j++)
             {
-                if(playground[i][j].getDrawable() == imageResources[5])
+                if(playground[i][j].getDrawable() == imageResources[EResourceType.NONE.getValue()])
                 {
                     return true;
                 }
@@ -441,4 +474,5 @@ public class GameActivity extends AppCompatActivity {
 
         return false;
     }
+
 }

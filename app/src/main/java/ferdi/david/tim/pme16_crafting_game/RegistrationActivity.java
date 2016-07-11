@@ -18,6 +18,7 @@ import java.util.List;
 
 public class RegistrationActivity extends AppCompatActivity implements Button.OnClickListener, Validator.ValidationListener {
 
+    ApplicationController app;
     Validator validator;
 
     Button btnRegister;
@@ -38,8 +39,12 @@ public class RegistrationActivity extends AppCompatActivity implements Button.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        app = (ApplicationController) getApplication();
+
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(this);
+        if(btnRegister != null) {
+            btnRegister.setOnClickListener(this);
+        }
 
         validator = new Validator(this);
         validator.setValidationListener(this);
@@ -52,12 +57,19 @@ public class RegistrationActivity extends AppCompatActivity implements Button.On
     @Override
     public void onClick(View v) {
         validator.validate();
-        //ToDo: check if user exists; register new user;
     }
 
     @Override
     public void onValidationSucceeded() {
-        Toast.makeText(this, "Yay! we got it right!", Toast.LENGTH_SHORT).show();
+        List<DBUser> userList = DBUser.find(DBUser.class, "username = ?", etUsername.getText().toString());
+        if(userList.size() == 0) {
+            DBUser user = new DBUser(etUsername.getText().toString(), etPassword.getText().toString());
+            user.save();
+            Toast.makeText(this, "Benutzer erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
+            this.finish();
+        } else {
+            Toast.makeText(this, "User existiert bereits!!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

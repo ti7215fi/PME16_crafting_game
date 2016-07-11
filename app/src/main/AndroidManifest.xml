@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="DATABASE"
-            android:value="crafting_game.db" />
+            android:value="test.db" />
         <meta-data
             android:name="VERSION"
             android:value="1" />
@@ -38,7 +38,7 @@
         <activity android:name=".HighscoreActivity" />
         <activity android:name=".InventoryActivity" />
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LoginActivity" />
     </application>
 
 </manifest>
