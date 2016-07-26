@@ -51,7 +51,6 @@ public class GameActivity extends AppCompatActivity {
     private LinearLayout            linBoardGame;
     private Animation               blinkAnimation;
 
-    private int                     score;
     private TextView                txtScore;
     private TextView                txtTime;
 
@@ -85,8 +84,8 @@ public class GameActivity extends AppCompatActivity {
 
         context = this;
 
-        score = 0;
         txtScore = (TextView) findViewById(R.id.txt_score);
+        this.updateScoreText(this.app.getUser().getGame().getScore());
 
         txtTime = (TextView) findViewById(R.id.txt_time);
         timer = new Timer();
@@ -115,7 +114,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle state)
     {
         super.onSaveInstanceState( state );
-        state.putInt("score", score);
+        //state.putInt("score", score);
         state.putInt("time", time);
         DBGame game = this.app.getUser().getGame();
         if(game != null) {
@@ -128,7 +127,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle state)
     {
         super.onRestoreInstanceState( state );
-        updateScoreText(state.getInt("score"));
+        //updateScoreText(state.getInt("score"));
         time = state.getInt("time");
         updateTimeText(time);
     }
@@ -209,9 +208,6 @@ public class GameActivity extends AppCompatActivity {
                                 }while(listOfPoints.size()!=0);
 
                                 listOfPoints.clear();
-
-                                updateScoreText(score);
-
                             }
                             firstClick = true;
                         }
@@ -441,6 +437,7 @@ public class GameActivity extends AppCompatActivity {
     {
         if(listOfPoints.size() !=0)
         {
+            int collectedPoints = 0;
             int amountOfWood = 0;
             int amountOfMeat = 0;
             int amountOfCotton = 0;
@@ -472,6 +469,7 @@ public class GameActivity extends AppCompatActivity {
             if(amountOfWood > 0) {
                 DBResource wood = this.app.getUser().getInventory().get(EResourceType.WOOD.getValue());
                 amountOfWood *= multiplicator(amountOfWood);
+                collectedPoints += (amountOfWood * 10);
                 wood.setAmount(wood.getAmount() + amountOfWood);
                 wood.save();
             }
@@ -479,6 +477,7 @@ public class GameActivity extends AppCompatActivity {
             if(amountOfCotton > 0) {
                 DBResource cotton = this.app.getUser().getInventory().get(EResourceType.COTTON.getValue());
                 amountOfCotton *= multiplicator(amountOfCotton);
+                collectedPoints += (amountOfCotton * 10);
                 cotton.setAmount(cotton.getAmount() + amountOfCotton);
                 cotton.save();
             }
@@ -486,6 +485,7 @@ public class GameActivity extends AppCompatActivity {
             if(amountOfMeat > 0) {
                 DBResource meat = this.app.getUser().getInventory().get(EResourceType.MEAT.getValue());
                 amountOfMeat *= multiplicator(amountOfMeat);
+                collectedPoints += (amountOfMeat * 10);
                 meat.setAmount(meat.getAmount() + amountOfMeat);
                 meat.save();
             }
@@ -493,6 +493,7 @@ public class GameActivity extends AppCompatActivity {
             if(amountOfStone > 0) {
                 DBResource stone = this.app.getUser().getInventory().get(EResourceType.STONE.getValue());
                 amountOfStone *= multiplicator(amountOfStone);
+                collectedPoints += (amountOfStone * 10);
                 stone.setAmount(stone.getAmount() + amountOfStone);
                 stone.save();
             }
@@ -500,9 +501,20 @@ public class GameActivity extends AppCompatActivity {
             if(amountOfOre > 0) {
                 DBResource ore = this.app.getUser().getInventory().get(EResourceType.ORE.getValue());
                 amountOfOre *= multiplicator(amountOfOre);
+                collectedPoints += (amountOfOre * 10);
                 ore.setAmount(ore.getAmount() + amountOfOre);
                 ore.save();
             }
+
+            // set Score
+            DBGame game = this.app.getUser().getGame();
+
+
+            int userScore = game.getScore();
+            userScore += collectedPoints;
+            game.setScore(userScore);
+            game.save();
+            updateScoreText(userScore);
         }
     }
 

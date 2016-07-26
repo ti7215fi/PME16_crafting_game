@@ -44,6 +44,11 @@ public class DBGame extends SugarRecord{
         return this.score;
     }
 
+    public void setScore(int _score)
+    {
+        this.score = _score;
+    }
+
     public String getPlayground() {
         return this.playground;
     }
