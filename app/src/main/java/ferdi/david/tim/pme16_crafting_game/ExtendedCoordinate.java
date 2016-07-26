@@ -9,7 +9,6 @@ import android.graphics.drawable.Drawable;
 public class ExtendedCoordinate {
     private Point point;
     private Drawable drawable;
-    //test
 
     public ExtendedCoordinate(Point point, Drawable drawable)
     {
