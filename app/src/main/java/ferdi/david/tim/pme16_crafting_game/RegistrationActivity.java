@@ -91,7 +91,7 @@ public class RegistrationActivity extends AppCompatActivity implements Button.On
         if(user != null) {
             for (EResourceType resource : EResourceType.values()) {
                 if(resource != EResourceType.NONE) {
-                    DBResource newResource = new DBResource(resource, this.app.getUser());
+                    DBResource newResource = new DBResource(resource, user);
                     newResource.save();
                     }
                 }
