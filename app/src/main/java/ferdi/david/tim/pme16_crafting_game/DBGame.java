@@ -91,6 +91,9 @@ public class DBGame extends SugarRecord{
         this.playgroundAsIntArray = null;
     }
 
+    public DBUser getUser() {
+        return this.user;
+    }
     public void setUser(DBUser _user) {
         this.user = _user;
     }
