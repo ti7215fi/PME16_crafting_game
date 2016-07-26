@@ -39,4 +39,12 @@ public class DBUser extends SugarRecord{
         return DBResource.find(DBResource.class,"user = ?", this.getId().toString());
     }
 
+    public DBResource getInventoryItem(int item) {
+        return DBResource.find(DBResource.class, "user = ? and type = ?", this.getId().toString(), ""+item).get(0);
+    }
+
+    public List<DBResource> getItemsByProductionChainLevel(int level) {
+        return DBResource.find(DBResource.class,"production_chain_level = ? and user = ?", ""+level, this.getId().toString());
+    }
+
 }

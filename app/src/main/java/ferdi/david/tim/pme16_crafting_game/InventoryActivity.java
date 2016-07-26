@@ -10,20 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-import android.widget.HeaderViewListAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class InventoryActivity extends AppCompatActivity {
 
     private GridView    inventoryGridView;
-    private int         items[] = {R.mipmap.stone, R.mipmap.ore, R.mipmap.cotton, R.mipmap.wood, R.mipmap.meat} ;
-    private float       height;
-    private float       width;
     private ApplicationController app;
 
     @Override
@@ -34,13 +28,6 @@ public class InventoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_inventory);
 
         app = (ApplicationController) getApplication();
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        width = size.x;
-        height = size.y;
-
         inventoryGridView = (GridView)findViewById(R.id.inventoryGridView);
         inventoryGridView.setAdapter(new ImageAdapter(this));
     }
@@ -55,7 +42,7 @@ public class InventoryActivity extends AppCompatActivity {
 
         //---returns the number of images---
         public int getCount() {
-            return items.length;
+            return app.getItems().length;
         }
 
         //---returns the ID of an item---
@@ -83,8 +70,8 @@ public class InventoryActivity extends AppCompatActivity {
                 row = inflater.inflate(R.layout.inventory_gridview_item , parent, false);
 
                 holder = new Holder();
-                holder.textView = (TextView) row.findViewById(R.id.inventory_gridviewitem_text);
-                holder.imageView = (ImageView) row.findViewById(R.id.inventory_gridviewitem_image);
+                holder.textView = (TextView) row.findViewById(R.id.shop_gridviewitem_text);
+                holder.imageView = (ImageView) row.findViewById(R.id.shop_gridviewitem_image);
 
                 row.setTag(holder);
 
@@ -93,12 +80,12 @@ public class InventoryActivity extends AppCompatActivity {
             }
 
             int amountOfItem = 0;
-            if(app.getUser() != null && app.getUser().getInventory() != null) {
-                amountOfItem = app.getUser().getInventory().get(position).getAmount();
+            if(app.getUser() != null) {
+                amountOfItem = app.getUser().getInventoryItem(position).getAmount();
             }
             holder.textView.setText(amountOfItem + " x");
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            holder.imageView.setImageResource(items[position]);
+            holder.imageView.setImageResource(app.getItems()[position]);
 
             return row;
         }

@@ -8,7 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ferdi.david.tim.pme16_crafting_game.MainActivity"
-    android:background="@mipmap/start_screen"
     android:orientation="vertical">
 
     <TextView
@@ -39,8 +38,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_login"
-        android:id="@+id/btnLogin"
+        android:text="@string/btn_shop"
+        android:id="@+id/btnShop"
         android:layout_gravity="center_horizontal" />
 
     <Button
@@ -55,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_logout"
         android:id="@+id/btnLogout"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_gravity="center_horizontal" />
 
 </LinearLayout>

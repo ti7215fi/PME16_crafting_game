@@ -13,13 +13,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txt_score"
-            android:id="@+id/txt_score" />
+            android:id="@+id/txt_score"
+            android:layout_gravity="center_horizontal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txt_time"
-            android:id="@+id/txt_time" />
+            android:id="@+id/txt_time"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
     <LinearLayout
@@ -27,7 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/linBoardGame"
-        android:background="@drawable/grassland"
-        android:gravity="center_vertical|center|center_horizontal"></LinearLayout>
+        android:gravity="center_vertical|center|center_horizontal"/>
 
 </LinearLayout>

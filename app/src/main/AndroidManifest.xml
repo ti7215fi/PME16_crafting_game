@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="DATABASE"
-            android:value="test.db" />
+            android:value="test25716_2.db" />
         <meta-data
             android:name="VERSION"
             android:value="1" />
@@ -27,7 +27,7 @@
             android:name="DOMAIN_PACKAGE_NAME"
             android:value="ferdi.david.tim.pme16_crafting_game" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +38,8 @@
         <activity android:name=".HighscoreActivity" />
         <activity android:name=".InventoryActivity" />
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ShopActivity"/>
     </application>
 
 </manifest>

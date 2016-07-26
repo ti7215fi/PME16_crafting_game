@@ -6,6 +6,7 @@
     <string name="btn_inventory">Inventar</string>
     <string name="btn_login">Login</string>
     <string name="btn_logout">Logout</string>
+    <string name="btn_shop">Shop</string>
     <string name="txt_score">Punkte: 0</string>
     <string name="txt_time">Zeit: 0:00:00</string>
     <string name="title_activity_login">Sign in</string>
@@ -19,6 +20,9 @@
 
     <!-- Strings related to inventory -->
     <string name="inventory_heading">Inventar</string>
+
+    <!-- Strings related to shop -->
+    <string name="shop">Shop</string>
 
     <!-- Strings related to registration -->
     <string name="registration">Registrierung</string>

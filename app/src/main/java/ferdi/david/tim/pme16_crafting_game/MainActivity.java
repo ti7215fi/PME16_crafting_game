@@ -3,10 +3,12 @@ package ferdi.david.tim.pme16_crafting_game;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,21 +33,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Button buttonLogin;
-    private View.OnClickListener buttonLoginOnClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View arg0) {
-            Intent i = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(i);
-        }
-    };
-
     private Button buttonLogout;
     private View.OnClickListener buttonLogoutOnClick = new View.OnClickListener() {
         @Override
         public void onClick(View arg0) {
             app.setUser(null);
-            onUserStateChanged();
+            //Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            //startActivity(i);
+            finish();
+        }
+    };
+
+    private Button buttonShop;
+    private View.OnClickListener buttonShopOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            Intent i = new Intent(MainActivity.this, ShopActivity.class);
+            startActivity(i);
         }
     };
 
@@ -78,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
             buttonHighscore.setOnClickListener(buttonHighScoreOnClick);
         }
 
+        buttonShop = (Button)findViewById(R.id.btnShop);
+        if(buttonShop != null) {
+            buttonShop.setOnClickListener(buttonShopOnClick);
+        }
+
         buttonInventory = (Button)findViewById(R.id.btnInventory);
         if(buttonInventory != null) {
             buttonInventory.setOnClickListener(buttonInventoryOnClick);
-        }
-
-        buttonLogin = (Button)findViewById(R.id.btnLogin);
-        if(buttonLogin != null) {
-            buttonLogin.setOnClickListener(buttonLoginOnClick);
         }
 
         buttonLogout = (Button)findViewById(R.id.btnLogout);
@@ -104,11 +108,9 @@ public class MainActivity extends AppCompatActivity {
         if(app.getUser() != null) {
             tVUsername.setText("Benutzer: " + app.getUser().getUsername());
             tVUsername.setVisibility(View.VISIBLE);
-            buttonLogin.setVisibility(View.INVISIBLE);
             buttonLogout.setVisibility(View.VISIBLE);
         } else if(tVUsername.getVisibility() != View.INVISIBLE){
             tVUsername.setVisibility(View.INVISIBLE);
-            buttonLogin.setVisibility(View.VISIBLE);
             buttonLogout.setVisibility(View.INVISIBLE);
         }
     }
