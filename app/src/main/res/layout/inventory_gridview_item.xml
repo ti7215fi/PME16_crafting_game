@@ -6,7 +6,7 @@
 
     <ImageView
         android:layout_height="64dp"
-        android:id="@+id/inventory_gridviewitem_image"
+        android:id="@+id/shop_gridviewitem_image"
         android:layout_width="64dp"
         android:src="@mipmap/ic_launcher"
         android:layout_alignParentTop="true"
@@ -16,9 +16,9 @@
     <TextView
         android:text="TextView"
         android:layout_height="wrap_content"
-        android:id="@+id/inventory_gridviewitem_text"
+        android:id="@+id/shop_gridviewitem_text"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/inventory_gridviewitem_image"
+        android:layout_below="@+id/shop_gridviewitem_image"
         android:layout_marginTop="2dp"
         android:layout_centerHorizontal="true"
         android:textSize="18sp"

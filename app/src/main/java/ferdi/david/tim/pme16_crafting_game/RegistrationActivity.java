@@ -1,6 +1,5 @@
 package ferdi.david.tim.pme16_crafting_game;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -65,6 +64,7 @@ public class RegistrationActivity extends AppCompatActivity implements Button.On
         if(userList.size() == 0) {
             DBUser user = new DBUser(etUsername.getText().toString(), etPassword.getText().toString());
             user.save();
+            initInventory(user);
             Toast.makeText(this, "Benutzer erfolgreich gespeichert!", Toast.LENGTH_SHORT).show();
             this.finish();
         } else {
@@ -84,6 +84,17 @@ public class RegistrationActivity extends AppCompatActivity implements Button.On
             } else {
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private void initInventory(DBUser user) {
+        if(user != null) {
+            for (EResourceType resource : EResourceType.values()) {
+                if(resource != EResourceType.NONE) {
+                    DBResource newResource = new DBResource(resource, this.app.getUser());
+                    newResource.save();
+                    }
+                }
         }
     }
 }

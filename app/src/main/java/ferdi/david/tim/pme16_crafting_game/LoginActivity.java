@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         setContentView(R.layout.activity_login);
 
         app = (ApplicationController) getApplication();
+        etUsername = (EditText) findViewById(R.id.username_login);
+        etPassword = (EditText) findViewById(R.id.password_login);
 
         btnLogin = (Button) findViewById(R.id.btnSignUp);
         if(btnLogin != null) {
@@ -67,9 +69,6 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
 
         validator = new Validator(this);
         validator.setValidationListener(this);
-
-        etUsername = (EditText) findViewById(R.id.username_login);
-        etPassword = (EditText) findViewById(R.id.password_login);
     }
 
     @Override
@@ -78,7 +77,9 @@ public class LoginActivity extends AppCompatActivity implements Validator.Valida
         if(userList.size() == 1 && userList.get(0).getPassword().equals(etPassword.getText().toString())) {
            app.setUser(userList.get(0));
            Toast.makeText(this, "Erfolgreich eingeloggt!", Toast.LENGTH_SHORT).show();
-            this.finish();
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+            //this.finish();
         } else {
             Toast.makeText(this, "Benutzer existiert nicht oder das Passwort ist falsch!", Toast.LENGTH_SHORT).show();
         }

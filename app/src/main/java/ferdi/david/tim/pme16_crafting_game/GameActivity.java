@@ -2,14 +2,22 @@ package ferdi.david.tim.pme16_crafting_game;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,17 +36,20 @@ public class GameActivity extends AppCompatActivity {
     private int                     maxX = 7;  // amount of cells
     private int                     maxY = 7; // amount of rows
 
-    private ImageView[][]           playground;
-    private int[][]                 dbPlayground;
-    private Context                 context;
-    private Drawable[]              imageResources;
-    private List<ExtendedCoordinate>             listOfPoints = new ArrayList<>();
-
     private boolean                 firstClick = true;
     private int                     firstMoveX;
     private int                     firstMoveY;
     private int                     secMoveX;
     private int                     secMoveY;
+
+    private ImageView[][]           playground;
+    private int[][]                 dbPlayground;
+    private Context                 context;
+    private Drawable[]              imageResources;
+    private Drawable                noneResource;
+    private List<ExtendedCoordinate>listOfPoints = new ArrayList<>();
+    private LinearLayout            linBoardGame;
+    private Animation               blinkAnimation;
 
     private int                     score;
     private TextView                txtScore;
@@ -67,8 +78,10 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         app = (ApplicationController) getApplication();
+        linBoardGame = (LinearLayout) findViewById(R.id.linBoardGame);
         playground = new ImageView[maxX][maxY];
         dbPlayground = new int[maxX][maxY];
+        blinkAnimation = AnimationUtils.loadAnimation(this, R.anim.blink);
 
         context = this;
 
@@ -79,7 +92,6 @@ public class GameActivity extends AppCompatActivity {
         timer = new Timer();
 
         loadImagesResources();
-        initInventory();
         designBoard();
 
         if(this.app.getUser() != null && this.app.getUser().getGame() != null) {
@@ -105,6 +117,11 @@ public class GameActivity extends AppCompatActivity {
         super.onSaveInstanceState( state );
         state.putInt("score", score);
         state.putInt("time", time);
+        DBGame game = this.app.getUser().getGame();
+        if(game != null) {
+            game.setPlayground(dbPlayground);
+            game.save();
+        }
     }
 
     @Override
@@ -125,29 +142,14 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void loadImagesResources() {
-        imageResources = new Drawable[6];
-        imageResources[EResourceType.NONE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
+        noneResource =  ResourcesCompat.getDrawable(getResources(), R.drawable.leer, null);
+
+        imageResources = new Drawable[5];
         imageResources[EResourceType.STONE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.stone, null);
         imageResources[EResourceType.ORE.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.ore, null);
         imageResources[EResourceType.COTTON.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.cotton, null);
         imageResources[EResourceType.WOOD.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.wood, null);
         imageResources[EResourceType.MEAT.getValue()] =  ResourcesCompat.getDrawable(getResources(), R.mipmap.meat, null);
-    }
-
-    /**
-     * - init the inventory, if no one exists
-     */
-    private void initInventory() {
-        if(this.app.getUser() != null) {
-            if(this.app.getUser().getInventory().size() == 0) {
-                for (EResourceType resource : EResourceType.values()) {
-                    if(resource != EResourceType.NONE) {
-                        DBResource newResource = new DBResource(resource.getValue(), this.app.getUser());
-                        newResource.save();
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -158,26 +160,24 @@ public class GameActivity extends AppCompatActivity {
      */
     @SuppressLint("NewApi")
     private void designBoard() {
-        LinearLayout linBoardGame = (LinearLayout) findViewById(R.id.linBoardGame);
-
         for (int i = 0; i < maxY; i++) {
             LinearLayout linRow = new LinearLayout(context);
             for (int j = 0; j < maxX; j++) {
-                int randomResource = getRandomInt(1, 5);
-                dbPlayground[i][j] = randomResource;
-                playground[i][j] = new ImageView(context);
-                playground[i][j].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-                playground[i][j].setImageDrawable(imageResources[randomResource]);
+                int resource;
+
+                if(this.app.getUser().getGame() == null || this.app.getUser().getGame().getPlaygroundAsIntArray() == null) {
+                    resource = getRandomInt(0, 4);
+                } else {
+                    resource = this.app.getUser().getGame().getPlaygroundAsIntArray()[i][j];
+                }
+                ImageView item = initItem(i,j,resource);
+                dbPlayground[i][j] = resource;
+
                 final int y = i;
                 final int x = j;
-                playground[i][j].setOnClickListener(new View.OnClickListener() {
-                    /**
-                     * - check if first or second move
-                     * - if second move, switch images
-                     * @param v actual view
-                     */
+                item.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View view) {
                         Drawable tempCell1, tempCell2;
 
                         if (firstClick)
@@ -185,6 +185,7 @@ public class GameActivity extends AppCompatActivity {
                             firstMoveX = x;
                             firstMoveY = y;
                             firstClick = false;
+                            view.startAnimation(blinkAnimation);
                         }
                         else
                         {
@@ -216,11 +217,9 @@ public class GameActivity extends AppCompatActivity {
                         }
                     }
                 });
-                linRow.addView(playground[i][j]);
+                linRow.addView(item);
             }
-            if (linBoardGame != null) {
-                linBoardGame.addView(linRow);
-            }
+            linBoardGame.addView(linRow);
         }
 
         if(this.app.getUser() != null && this.app.getUser().getGame() == null) {
@@ -232,6 +231,18 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private ImageView initItem(int row, int col, int resource) {
+        LinearLayout.LayoutParams itemLayout = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        itemLayout.setMargins(3,3,0,0);
+
+        playground[row][col] = new ImageView(context);
+        playground[row][col].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        playground[row][col].setImageDrawable(imageResources[resource]);
+        playground[row][col].setBackgroundColor(ContextCompat.getColor(context, R.color.materialBlueGrey800));
+        playground[row][col].setLayoutParams(itemLayout);
+
+        return playground[row][col];
+    }
 
     /**
      * Returns a random number between two parameters
@@ -369,7 +380,7 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("NewApi")
     private void whiteOutBlocks() {
         for (ExtendedCoordinate point : listOfPoints) {
-            playground[point.getPointX()][point.getPointY()].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
+            playground[point.getPointX()][point.getPointY()].setImageDrawable(noneResource);
         }
     }
 
@@ -385,15 +396,17 @@ public class GameActivity extends AppCompatActivity {
             for(int i = maxY-1; i >= 0 ; i--) {
                 for (int j = 0; j < maxX; j++) {
 
-                    if (playground[i][j].getDrawable() == imageResources[EResourceType.NONE.getValue()])
+                    if (playground[i][j].getDrawable() == noneResource)
                     {
 
                         if(i != 0) {
                             playground[i][j].setImageDrawable(playground[i - 1][j].getDrawable());
-                            playground[i - 1][j].setImageDrawable(imageResources[EResourceType.NONE.getValue()]);
+                            playground[i - 1][j].setImageDrawable(noneResource);
                         }
                         else {
-                            playground[i][j].setImageDrawable(imageResources[getRandomInt(1, 5)]);
+                            int randomResource = getRandomInt(0, 4);
+                            playground[i][j].setImageDrawable(imageResources[randomResource]);
+                            dbPlayground[i][j] = randomResource;
                         }
                     }
                 }
@@ -411,7 +424,7 @@ public class GameActivity extends AppCompatActivity {
         {
             for(int j = 0; j < maxX; j++)
             {
-                if(playground[i][j].getDrawable() == imageResources[EResourceType.NONE.getValue()])
+                if(playground[i][j].getDrawable() == noneResource)
                 {
                     return true;
                 }
@@ -455,30 +468,41 @@ public class GameActivity extends AppCompatActivity {
                     amountOfStone +=1;
                 }
             }
-            int a = 0;
-            amountOfCotton *= multiplicator(amountOfCotton);
-            amountOfMeat *= multiplicator(amountOfMeat);
-            amountOfWood *= multiplicator(amountOfWood);
-            amountOfStone *= multiplicator(amountOfStone);
-            amountOfOre *= multiplicator(amountOfOre);
 
-            DBResource cotton = this.app.getUser().getInventory().get(EResourceType.COTTON.getValue() -1);
-            DBResource ore = this.app.getUser().getInventory().get(EResourceType.ORE.getValue() -1);
-            DBResource stone = this.app.getUser().getInventory().get(EResourceType.STONE.getValue() -1);
-            DBResource wood = this.app.getUser().getInventory().get(EResourceType.WOOD.getValue() -1);
-            DBResource meat = this.app.getUser().getInventory().get(EResourceType.MEAT.getValue() -1);
+            if(amountOfWood > 0) {
+                DBResource wood = this.app.getUser().getInventory().get(EResourceType.WOOD.getValue());
+                amountOfWood *= multiplicator(amountOfWood);
+                wood.setAmount(wood.getAmount() + amountOfWood);
+                wood.save();
+            }
 
-            cotton.setAmount(cotton.getAmount() + amountOfCotton);
-            ore.setAmount(ore.getAmount() + amountOfOre);
-            stone.setAmount(stone.getAmount() + amountOfStone);
-            wood.setAmount(wood.getAmount() + amountOfWood);
-            meat.setAmount(meat.getAmount() + amountOfMeat);
+            if(amountOfCotton > 0) {
+                DBResource cotton = this.app.getUser().getInventory().get(EResourceType.COTTON.getValue());
+                amountOfCotton *= multiplicator(amountOfCotton);
+                cotton.setAmount(cotton.getAmount() + amountOfCotton);
+                cotton.save();
+            }
 
-            cotton.save();
-            ore.save();
-            stone.save();
-            wood.save();
-            meat.save();
+            if(amountOfMeat > 0) {
+                DBResource meat = this.app.getUser().getInventory().get(EResourceType.MEAT.getValue());
+                amountOfMeat *= multiplicator(amountOfMeat);
+                meat.setAmount(meat.getAmount() + amountOfMeat);
+                meat.save();
+            }
+
+            if(amountOfStone > 0) {
+                DBResource stone = this.app.getUser().getInventory().get(EResourceType.STONE.getValue());
+                amountOfStone *= multiplicator(amountOfStone);
+                stone.setAmount(stone.getAmount() + amountOfStone);
+                stone.save();
+            }
+
+            if(amountOfOre > 0) {
+                DBResource ore = this.app.getUser().getInventory().get(EResourceType.ORE.getValue());
+                amountOfOre *= multiplicator(amountOfOre);
+                ore.setAmount(ore.getAmount() + amountOfOre);
+                ore.save();
+            }
         }
     }
 

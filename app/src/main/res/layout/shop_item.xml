@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="5dp">
+
+
+    <ImageView
+        android:layout_height="64dp"
+        android:id="@+id/shop_gridviewitem_image"
+        android:layout_width="64dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:clickable="true"
+        android:contentDescription="">
+    </ImageView>
+
+    <TextView
+        android:text="TextView"
+        android:layout_height="wrap_content"
+        android:id="@+id/shop_gridviewitem_text"
+        android:layout_width="wrap_content"
+        android:textSize="18sp"
+        android:ellipsize="marquee"
+        android:layout_below="@+id/shop_gridviewitem_image"
+        android:layout_alignLeft="@+id/shop_gridviewitem_image"
+        android:layout_alignStart="@+id/shop_gridviewitem_image" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/shop_imageView"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignBottom="@+id/shop_gridviewitem_text"
+        android:layout_toLeftOf="@+id/shop_gridviewitem_image"
+        android:layout_toStartOf="@+id/shop_gridviewitem_image" />
+
+</RelativeLayout>

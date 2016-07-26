@@ -12,6 +12,27 @@ import java.util.Arrays;
 public class ApplicationController extends SugarApp{
 
     private DBUser user;
+    private int items[] = {
+            R.mipmap.stone,
+            R.mipmap.ore,
+            R.mipmap.cotton,
+            R.mipmap.wood,
+            R.mipmap.meat,
+            R.mipmap.bar_iron,
+            R.mipmap.planks,
+            R.mipmap.rope,
+            R.mipmap.stone_blocks
+    } ;
+
+    private static ApplicationController instance;
+
+    public static ApplicationController getInstance () {
+        if (ApplicationController.instance == null) {
+            ApplicationController.instance = new ApplicationController ();
+        }
+        return ApplicationController.instance;
+    }
+
 
     /**
      * @return amount of horizontal pixels of the device
@@ -29,6 +50,10 @@ public class ApplicationController extends SugarApp{
 
     public void setUser(DBUser _user) {
         this.user = _user;
+    }
+
+    public int[] getItems() {
+        return this.items;
     }
 
 }
