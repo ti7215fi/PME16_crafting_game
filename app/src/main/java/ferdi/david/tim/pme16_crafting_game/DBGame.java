@@ -54,7 +54,6 @@ public class DBGame extends SugarRecord{
     }
 
     /**
-     * ToDo: unit test
      * Parse character array to 2d integer array
      * @return playgroundAsIntArray
      */
@@ -76,7 +75,6 @@ public class DBGame extends SugarRecord{
     }
 
     /**
-     * ToDo: unit test
      * Parse the 2d integer array to String, because the sqlite db doesnt support arrays.
      * Set the member variable playgroundAsIntArray to null, because the playground has changed.
      * @param _playground playground represented as integer array
