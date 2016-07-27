@@ -21,7 +21,7 @@ import java.util.List;
 
 public class HighscoreActivity extends AppCompatActivity {
 
-    private List<DBUser> users;
+    private List<DBGame> games;
     private ListView     highscoreList;
 
     @Override
@@ -31,11 +31,13 @@ public class HighscoreActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_highscore);
 
-        users = DBUser.listAll(DBUser.class);
+        games = DBGame.findWithQuery(DBGame.class, "SELECT * FROM DB_GAME order by score desc");
+
         highscoreList = (ListView) findViewById(R.id.lVHighscore);
+        highscoreList.setAdapter(new HighscoreAdapter(this));
     }
 
-   /* public class HighscoreAdapter extends BaseAdapter {
+   public class HighscoreAdapter extends BaseAdapter {
         private Context context;
 
         public HighscoreAdapter(Context c)
@@ -45,12 +47,12 @@ public class HighscoreActivity extends AppCompatActivity {
 
         //---returns the number of images---
         public int getCount() {
-            return app.getItems().length;
+            return games.size();
         }
 
         //---returns the ID of an item---
         public Object getItem(int position) {
-            return position;
+            return games.get(position);
         }
 
         public long getItemId(int position) {
@@ -73,27 +75,24 @@ public class HighscoreActivity extends AppCompatActivity {
                 row = inflater.inflate(R.layout.highscore_item , parent, false);
 
                 holder = new Holder();
-                holder.tvName = (TextView) row.findViewById(R.id.shop_gridviewitem_text);
-                holder.tvScore = (ImageView) row.findViewById(R.id.shop_gridviewitem_image);
+                holder.tvName = (TextView) row.findViewById(R.id.tvHighscoreName);
+                holder.tvScore = (TextView) row.findViewById(R.id.tvHighscoreScore);
 
                 row.setTag(holder);
 
             } else {
                 holder = (Holder) row.getTag();
             }
+            int ranking = position + 1;
+            holder.tvName.setText(ranking+". " + games.get(position).getUser().getUsername());
 
-            int amountOfItem = 0;
-            if(app.getUser() != null) {
-                amountOfItem = app.getUser().getInventoryItem(position).getAmount();
-            }
-            holder.textView.setText(amountOfItem + " x");
-            holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            holder.imageView.setImageResource(app.getItems()[position]);
+            int score = games.get(position).getScore();
+            holder.tvScore.setText(""+score);
 
             return row;
         }
 
-    }*/
+    }
 
 
 }
