@@ -261,7 +261,7 @@ public class GameActivity extends AppCompatActivity {
      * @param m2X value Y second  move
      * @return true, if move is correct, false if move is not allowed
      */
-    private boolean checkMove(int m1Y, int m1X, int m2Y, int m2X) {
+    public boolean checkMove(int m1Y, int m1X, int m2Y, int m2X) {
         int diffYY, diffXX;
 
         if (m1Y < m2Y) {
@@ -301,7 +301,7 @@ public class GameActivity extends AppCompatActivity {
      * @param posX position x
      * @return true if the list contains the Point
      */
-    private boolean containsPoint(int posY, int posX)
+    public boolean containsPoint(int posY, int posX)
     {
         for(int i = 0; i< listOfPoints.size(); i++)
         {
