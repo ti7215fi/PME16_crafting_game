@@ -85,7 +85,13 @@ public class GameActivity extends AppCompatActivity {
         context = this;
 
         txtScore = (TextView) findViewById(R.id.txt_score);
-        this.updateScoreText(this.app.getUser().getGame().getScore());
+
+        int score = 0;
+        if(this.app.getUser().getGame() != null) {
+            score = this.app.getUser().getGame().getScore();
+        }
+
+        this.updateScoreText(score);
 
         txtTime = (TextView) findViewById(R.id.txt_time);
         timer = new Timer();
